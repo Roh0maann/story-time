@@ -7,22 +7,22 @@
                         <h4>Register</h4>
                         <div class="mt-3">
                             <div class="mb-3">
-                                <UiBase-Input v-model="name" name="name" type="text" label="Name" placeholder="Enter name" identity="name" />
+                                <UiBase-Input v-model="store.name" name="name" type="text" label="Name" placeholder="Enter name" identity="name" />
                             </div>
                             <div class="mb-3">
-                                <UiBase-Input v-model="username" name="username" type="text" label="Username" placeholder="Enter username" identity="username" />
+                                <UiBase-Input v-model="store.username" name="username" type="text" label="Username" placeholder="Enter username" identity="username" />
                             </div>
                             <div class="mb-3">
-                                <UiBase-Input v-model="email" name="email" type="email" label="Email" placeholder="Enter email" identity="email" />
+                                <UiBase-Input v-model="store.email" name="email" type="email" label="Email" placeholder="Enter email" identity="email" />
                             </div>
                             <div class="mb-3 position-relative">
-                                <UiBase-Input v-model="password" name="password" :type="passwordFieldType" label="Password" placeholder="Enter password" identity="password" />
+                                <UiBase-Input v-model="store.password" name="password" :type="passwordFieldType" label="Password" placeholder="Enter password" identity="password" />
                                 <span @click="togglePasswordVisibility" class="position-absolute top-50 end-0 mt-1 me-2 border-0 bg-white">
                                     <i :class="passwordIcon"></i>
                                 </span>
                             </div>
                             <div class="mb-3 position-relative">
-                                <UiBase-Input v-model="passwordConfirmation" name="confirmation" :type="passwordFieldType1" label="Password Confirmation" placeholder="Enter password confirmation" identity="confirmation" />
+                                <UiBase-Input v-model="store.passwordConfirmation" name="confirmation" :type="passwordFieldType1" label="Password Confirmation" placeholder="Enter password confirmation" identity="confirmation" />
                                 <span @click="togglePasswordVisibility1" class="position-absolute top-50 end-0 mt-1 me-2 border-0 bg-white">
                                     <i :class="passwordIcon1"></i>
                                 </span>
@@ -46,14 +46,8 @@ import { ref, computed } from 'vue';
 import { useAuth } from '~/stores/auth';
 import { useRouter } from 'vue-router';
 
-const authStore = useAuth();
+const store = useAuth();
 const router = useRouter();
-
-const name = ref('');
-const username = ref('');
-const email = ref('');
-const password = ref('');
-const passwordConfirmation = ref('');
 
 const isPasswordVisible = ref(false);
 const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));
@@ -72,6 +66,7 @@ function togglePasswordVisibility1() {
 }
 
 const register = async () => {
-    
+    await store.registerUser();
+    router.push("/");
 };
 </script>

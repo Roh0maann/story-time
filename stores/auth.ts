@@ -3,14 +3,22 @@ import { defineStore } from 'pinia';
 
 export const useAuth = defineStore("auth", {
     state: () => ({
-        user: null,
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        passwordConfirmation: "",
     }),
 
     actions: {
-        async registerUser(name:any, username:any, email:any, password:any) {
+        async registerUser() {
             try {
-                const register = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local/register');
-                this.user = register.data.user;
+                const register = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local/register', {
+                    name: this.name,
+                    username: this.username,
+                    email: this.email,
+                    password: this.password,
+                });
             } catch (err:any) {
                 console.log(err)
             }
@@ -19,7 +27,7 @@ export const useAuth = defineStore("auth", {
         async loginUser(identifier:any, password:any) {
             try {
                 const login = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local');
-                this.user = login.data.user;
+                this.name = login.data.user;
             } catch (err:any) {
                 console.log(err);
             }

@@ -22,5 +22,5 @@ export default defineNuxtConfig({
   },
   css: ['@/assets/main.css'],
   modules: ['@pinia/nuxt', '@vee-validate/nuxt'],
-  plugins: ['~/plugins/vee-validate.js']
+  plugins: ['~/plugins/vee-validate.ts']
 })
