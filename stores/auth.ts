@@ -8,6 +8,9 @@ export const useAuth = defineStore("auth", {
         email: "",
         password: "",
         passwordConfirmation: "",
+
+        userLogin: null,
+        userRegister: null,
     }),
 
     actions: {
@@ -19,18 +22,33 @@ export const useAuth = defineStore("auth", {
                     email: this.email,
                     password: this.password,
                 });
+
+                this.userRegister = register.data.user;
+                return true;
             } catch (err:any) {
                 console.log(err)
+                return false;
             }
         },
 
         async loginUser(identifier:any, password:any) {
             try {
-                const login = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local');
-                this.name = login.data.user;
-            } catch (err:any) {
+                const response = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local', {
+                    identifier,
+                    password
+                });
+
+                this.userLogin = response.data.user;
+                return true;
+            } catch (err: any) {
                 console.log(err);
+                return false;
             }
         },
+
+        async Logout() {
+            this.userLogin = null;
+            return true;
+        }
     },
 });

@@ -49,6 +49,16 @@ function togglePasswordVisibility() {
 }
 
 const login = async () => {
-    
+    try {
+        const success = await authStore.loginUser(email.value, password.value);
+        if (success) {
+            console.log("Login berhasil");
+            router.push("/"); 
+        } else {
+            console.log("Login gagal");
+        }
+    } catch (err) {
+        console.error("Login error", err);
+    }
 };
 </script>

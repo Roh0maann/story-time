@@ -15,7 +15,7 @@
             </NuxtLink>
             <li class="user-menu d-flex align-items-center p-2 bg-light">
                 <div
-                    class="py-1 px-3 btn btn-outline-danger rounded-0 w-100 d-flex justify-content-between align-items-center">
+                    class="py-1 px-3 btn btn-outline-danger rounded-0 w-100 d-flex justify-content-between align-items-center" @click="logout()">
                     Logout
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </div>
@@ -24,6 +24,15 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useAuth } from '~/stores/auth';
+import { useRouter } from 'vue-router';
 
+const authStore = useAuth();
+const router = useRouter();
+
+const logout = async () => {
+    await authStore.Logout();
+    router.push('/login');
+}
 </script>

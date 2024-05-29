@@ -2,12 +2,12 @@
     <div class="border shadow m-0 p-4 w-100">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="m-0 p-0">Password</h4>
-            <button class="py-1 px-3 btn btn-outline-dark rounded-0 w-25" style="font-size: 16px">
+            <button v-show="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0 w-25" style="font-size: 16px" @click="startEditing">
                 <i class="fa-regular fa-pen-to-square"></i>
                 Change Password
             </button>
         </div>
-        <form action="" class="">
+        <form v-show="isEditing" @submit.prevent="savePassword" action="" class="">
             <div class="mt-4">
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Old Password</label>
@@ -35,7 +35,7 @@
                     </span>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3">Cencel</button>
+                    <button type="submit" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" @click="cancelEditing">Cencel</button>
                     <button type="submit" class="btn btn-dark rounded-0 py-1 px-3 fs-6">Save</button>
                 </div>
             </div>
@@ -47,6 +47,22 @@
 useHead({
     title: "Story Time"
 })
+
+const isEditing = ref(false);
+
+function startEditing() {
+    isEditing.value = true;
+}
+
+function cancelEditing() {
+    isEditing.value = false;
+}
+
+function savePassword() {
+    
+    console.log("Password saved");
+    isEditing.value = false;
+}
 
 const isPasswordVisible = ref(false);
 const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));
@@ -73,4 +89,8 @@ const passwordIcon2 = computed(() => (isPasswordVisible2.value ? 'fa-solid fa-ey
 function togglePasswordVisibility2() {
     isPasswordVisible2.value = !isPasswordVisible2.value;
 }
+
+const changePassword = computed(() => {
+    
+});
 </script>
