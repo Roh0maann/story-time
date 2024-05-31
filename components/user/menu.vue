@@ -5,7 +5,7 @@
                 <i class="fa-regular fa-user me-2"></i>
                 My Profile
             </NuxtLink>
-            <NuxtLink to="/user/storys" class="btn btn-light rounded-0 user-menu d-flex align-items-center p-2 ps-3 border-bottom">
+            <NuxtLink to="/user/story" class="btn btn-light rounded-0 user-menu d-flex align-items-center p-2 ps-3 border-bottom">
                 <i class="fa-regular fa-rectangle-list me-2"></i>
                 Story List
             </NuxtLink>

@@ -13,9 +13,11 @@
     "@pinia/nuxt": "^0.5.1",
     "@vee-validate/nuxt": "^4.12.8",
     "@vee-validate/rules": "^4.12.8",
+    "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.7.0",
     "bootstrap": "^5.3.3",
     "cookie-universal-nuxt": "^2.2.2",
+    "js-cookie": "^3.0.5",
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "universal-cookie": "^7.1.4",
@@ -25,5 +27,8 @@
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^4.3.2",
     "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6"
   }
 }

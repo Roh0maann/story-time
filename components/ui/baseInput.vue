@@ -4,15 +4,16 @@
             {{ label }}
             <slot></slot>
         </label>
-        <input  :class="[{ 'd-none': isImage }, 'form-control', 'rounded-0']" 
-                :type="type"    
-                :id="identity"
-                :placeholder="placeholder" 
-                :value="modelValue" 
-                :readonly="readonly === '1'" 
-                @input="handleInput" 
-                @keyup="handleKeyUp" 
-                @focus="handleFocus">
+        <input :class="[{ 'd-none': isImage }, 'form-control', 'rounded-0']" 
+               :type="type"    
+               :id="identity"
+               :placeholder="placeholder" 
+               :value="modelValue" 
+               :readonly="readonly === '1'"
+               :disabled="disabled" 
+               @input="handleInput" 
+               @keyup="handleKeyUp" 
+               @focus="handleFocus">
     </div>
 </template>
 
@@ -24,7 +25,8 @@ const props = defineProps({
     placeholder: { type: String, required: false },
     readonly: { type: String, required: true, default: '0' },
     isImage: { type: Boolean, required: true, default: false },
-    modelValue: { type: [String, Number], required: true }
+    modelValue: { type: [String, Number], required: true },
+    disabled: { type: Boolean, required: false, default: false }  // Add disabled prop
 });
 
 const emit = defineEmits(['update:modelValue', 'keyInput', 'totalTimeFocus']);

@@ -8,6 +8,7 @@ export const useAuth = defineStore("auth", {
         email: "",
         password: "",
         passwordConfirmation: "",
+        jwt:"",
 
         userLogin: null,
         userRegister: null,
@@ -31,11 +32,11 @@ export const useAuth = defineStore("auth", {
             }
         },
 
-        async loginUser(identifier:any, password:any) {
+        async loginUser() {
             try {
-                const response = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local', {
-                    identifier,
-                    password
+                const response = await axios.post('https://storytime-api.strapi.timedoor-js.web.id//api/auth/local', {
+                    identifier: this.username || this.email,
+                    password: this.password
                 });
 
                 this.userLogin = response.data.user;

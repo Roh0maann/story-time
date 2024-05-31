@@ -15,11 +15,11 @@
                     </NuxtLink>
                     <p class="my-1 text-secondary line-clamp" style="font-size: 14px;">{{ item.content }}</p>
                     <div class="mt-1 text-secondary" style="font-size: 12px;">
-                        <p class="m-0">by {{ item.author.username }}</p>
+                        <p class="m-0">by {{ item.author?.username  }}</p>
                         <p class="m-0">{{ formatDate(item.createdAt) }}</p>
                     </div>
                     <div class="text-black mt-1" style="font-size: 12px;">
-                        <span class="py-0 px-1 bg-secondary rounded">{{ item.category.name }}</span>
+                        <span class="py-1 px-2 bg-body-secondary rounded">{{ item.category?.name }}</span>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@ import { defineProps } from 'vue';
 import { formatDate } from '~/helpers/dateFormat';
 
 const props = defineProps({
-    displayedData: Object
+    displayedData: Array
 });
 
 const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';

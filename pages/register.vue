@@ -69,9 +69,10 @@ const register = async () => {
     try {
         const success = await authStore.registerUser();
         if (success) {
-            router.push("/");
+            alert("Register berhasil");
+            router.push("/login");
         } else {
-            console.log("Register failed");
+            alert("Register failed");
         }
     } catch (err) {
         console.error("Register error", err);

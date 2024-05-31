@@ -2,10 +2,10 @@
     <div class="border shadow m-0 p-4 w-100 mb-4">
         <div class="d-flex justify-content-between align-items-center align-content-center">
             <h4 class="m-0 p-0">Story List</h4>
-            <button class="py-1 px-1 btn btn-dark rounded-0 fw-semibold " style="font-size: 14px; width: 18%;">
+            <NuxtLink to="/user/story/create" class="py-1 px-1 btn btn-dark rounded-0 fw-semibold " style="font-size: 14px; width: 18%;">
                 +
                 Create Story
-            </button>
+            </NuxtLink>
         </div>
         <div class="mt-5 mb-3">
             <div class="text-center">

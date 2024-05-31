@@ -2,10 +2,10 @@
     <div class="border shadow m-0 p-4 w-100 mb-4">
         <div class="d-flex justify-content-between align-items-center align-content-center">
             <h4 class="m-0 p-0">My Profile</h4>
-            <button class="py-1 px-3 btn btn-outline-dark rounded-0" style="font-size: 16px; width: 17%;">
+            <UiBase-Button v-if="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0" style="font-size: 16px; width: 17%;" @click="startEditing">
                 <i class="fa-regular fa-pen-to-square"></i>
                 Edit Profile
-            </button>
+            </UiBase-Button>
         </div>
         <div class="mt-5 mb-4 d-flex row">
             <div class="col-4">
@@ -20,20 +20,61 @@
                 </div>
             </div>
             <div class="col-8">
-                <div class="d-flex">
+                <div v-if="!isEditing" class="d-flex" name="dataProfile">
                     <div class="text-black fw-semibold me-5">
                         <p>Name</p>
                         <p>Email</p>
                         <p>Biodata</p>
                     </div>
 
-                    <div class=" text-secondary fw-normal w-100 ">
-                        <p>Ezy</p>
-                        <p>Ezy@gmail.com</p>
-                        <p>Hi</p>
+                    <div class="text-secondary fw-normal w-100">
+                        <p>{{ profile.name }}</p>
+                        <p>{{ profile.email }}</p>
+                        <p>{{ profile.biodata }}</p>
                     </div>
+                </div>
+
+                <div v-if="isEditing">
+                    <form @submit.prevent="saveProfile">
+                        <div class="mb-3">
+                            <UiBase-Input name="name" type="text" label="Name" placeholder="Enter your name" identity="name" v-model="profile.name" />
+                        </div>
+                        <div class="mb-3">
+                            <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email" identity="email" v-model="profile.email" :disabled="true" />
+                        </div>
+                        <div class="mb-3">
+                            <UiBase-Text-Area name="aboutMe" type="text" label="About me" placeholder="Enter about me" identity="aboutMe" v-model="profile.biodata" />
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" @click="cancelEditing">Cancel</UiBase-Button>
+                            <UiBase-Button type="submit" class="btn btn-dark rounded-0 py-1 px-3 fs-6">Save</UiBase-Button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const isEditing = ref(false);
+const profile = ref({
+    name: 'Ezy',
+    email: 'Ezy@gmail.com',
+    biodata: 'Hi'
+});
+
+function startEditing() {
+    isEditing.value = true;
+}
+
+function cancelEditing() {
+    isEditing.value = false;
+}
+
+function saveProfile() {
+    isEditing.value = false;
+}
+</script>

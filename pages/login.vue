@@ -7,10 +7,10 @@
                         <h4>Login</h4>
                         <div class="mt-3">
                             <div class="mb-3">
-                                <UiBase-Input v-model="email" name="email" type="email" label="Email/Username" placeholder="Enter email/username" identity="email"/>
+                                <UiBase-Input v-model="identifier" name="email" type="text" label="Email/Username" placeholder="Enter email/username" identity="email"/>
                             </div>
                             <div class="mb-3 position-relative">
-                                <UiBase-Input v-model="password" name="password" :type="passwordFieldType" label="Password" placeholder="Enter password" identity="password" />
+                                <UiBase-Input v-model="authStore.password" name="password" :type="passwordFieldType" label="Password" placeholder="Enter password" identity="password" />
                                 <span @click="togglePasswordVisibility" class="position-absolute top-50 end-0 mt-1 me-2 border-0 bg-white">
                                     <i :class="passwordIcon"></i>
                                 </span>
@@ -37,8 +37,7 @@ import { useRouter } from 'vue-router';
 const authStore = useAuth();
 const router = useRouter();
 
-const email = ref('');
-const password = ref('');
+const identifier = ref('');
 
 const isPasswordVisible = ref(false);
 const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));
@@ -49,13 +48,16 @@ function togglePasswordVisibility() {
 }
 
 const login = async () => {
+    authStore.email = identifier.value.includes('@') ? identifier.value : '';
+    authStore.username = !identifier.value.includes('@') ? identifier.value : '';
+    
     try {
-        const success = await authStore.loginUser(email.value, password.value);
+        const success = await authStore.loginUser();
         if (success) {
-            console.log("Login berhasil");
+            alert("Login berhasil");
             router.push("/"); 
         } else {
-            console.log("Login gagal");
+            alert("Login gagal");
         }
     } catch (err) {
         console.error("Login error", err);

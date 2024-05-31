@@ -20,7 +20,14 @@ export default defineNuxtConfig({
       ]
     }
   },
-  css: ['@/assets/main.css'],
-  modules: ['@pinia/nuxt', '@vee-validate/nuxt'],
-  plugins: ['~/plugins/vee-validate.ts', { src: '~/plugins/cookies.ts', mode: 'client' }]
+  css: [
+    '@/assets/main.css'
+  ],
+  modules: [
+    '@pinia/nuxt',
+    '@vee-validate/nuxt',
+  ],
+  plugins: [
+    '~/plugins/vee-validate.ts',
+  ]
 })
