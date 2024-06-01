@@ -43,7 +43,7 @@
                             <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email" identity="email" v-model="profile.email" :disabled="true" />
                         </div>
                         <div class="mb-3">
-                            <UiBase-Text-Area name="aboutMe" type="text" label="About me" placeholder="Enter about me" identity="aboutMe" v-model="profile.biodata" />
+                            <UiBase-Text-Area name="aboutMe" label="About me" placeholder="Enter about me" identity="aboutMe" v-model="profile.biodata" />
                         </div>
                         <div class="d-flex justify-content-end">
                             <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" @click="cancelEditing">Cancel</UiBase-Button>

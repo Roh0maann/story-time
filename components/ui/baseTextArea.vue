@@ -1,7 +1,7 @@
 <template>
     <div>
         <label :for="identity" class="form-label">{{ label }}</label>
-        <input 
+        <textarea 
             class="form-control rounded-0" 
             :type="type"    
             :id="identity"

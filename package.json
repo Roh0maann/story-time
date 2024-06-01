@@ -26,6 +26,7 @@
     "vue-cropperjs": "^5.0.0",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^4.3.2",
+    "vue3-cookies": "^1.0.6",
     "yup": "^1.4.0"
   },
   "devDependencies": {

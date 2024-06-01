@@ -4,7 +4,7 @@
             <NuxtLink to="/user/story" class="text-decoration-none text-black">
                 <i class="fa-solid fa-arrow-left me-4"></i>
             </NuxtLink>
-            <h4 class="m-0 p-0">Create Story</h4>
+            <h4 class="m-0 p-0">Edit Story</h4>
         </div>
 
         <form @submit.prevent="saveStory" class="">
@@ -13,7 +13,7 @@
                     <UiBase-Input v-model="title" name="title" type="text" label="Title" placeholder="Enter a story title" identity="title" />
                 </div>
                 <div class="mb-3"> 
-                    <UiBase-Select v-model="category" :data="categoryOptions" label="Category" identity="category" />
+                    <UiBase-Select v-model="category" :data="['Select a category', 'Comedy', 'Horror', 'Romance']" label="Category" identity="category" />
                 </div> 
                 <div class="mb-3">
                     <UiQuill v-model="content" label="Content" placeholder="Insert text here ..."></UiQuill>
@@ -50,25 +50,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useCategory } from '~/stores/category';
+import UiBaseInput from '@/components/ui/baseInput.vue'; 
 
 const router = useRouter();
 
 const title = ref('');
 const content = ref('');
-const category = ref('');
+const category = ref('Select a category');
 const image = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
-
-const categoryStore = useCategory();
-const categoryOptions = ref<string[]>(['Select a category']); // Default option
-
-onMounted(async () => {
-    await categoryStore.fetchCategories();
-    categoryOptions.value = ['Select a category', ...categoryStore.categoryList];
-});
 
 function batalAdd() {
     router.push('/user/story');

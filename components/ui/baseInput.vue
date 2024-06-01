@@ -8,10 +8,11 @@
                :type="type"    
                :id="identity"
                :placeholder="placeholder" 
-               :value="modelValue" 
+               :value="type === 'file' ? undefined : modelValue" 
                :readonly="readonly === '1'"
                :disabled="disabled" 
                @input="handleInput" 
+               @change="handleChange"
                @keyup="handleKeyUp" 
                @focus="handleFocus">
     </div>
@@ -25,14 +26,22 @@ const props = defineProps({
     placeholder: { type: String, required: false },
     readonly: { type: String, required: true, default: '0' },
     isImage: { type: Boolean, required: true, default: false },
-    modelValue: { type: [String, Number], required: true },
-    disabled: { type: Boolean, required: false, default: false }  // Add disabled prop
+    modelValue: { type: [String, Number, File], required: true },
+    disabled: { type: Boolean, required: false, default: false } 
 });
 
 const emit = defineEmits(['update:modelValue', 'keyInput', 'totalTimeFocus']);
 
 const handleInput = (event) => {
-    emit('update:modelValue', event.target.value);
+    if (props.type !== 'file') {
+        emit('update:modelValue', event.target.value);
+    }
+};
+
+const handleChange = (event) => {
+    if (props.type === 'file') {
+        emit('update:modelValue', event.target.files[0]);
+    }
 };
 
 const handleKeyUp = (event) => {

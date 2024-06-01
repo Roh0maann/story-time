@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
+import Cookies from 'js-cookie';
 
 export const useAuth = defineStore("auth", {
     state: () => ({
@@ -8,10 +9,10 @@ export const useAuth = defineStore("auth", {
         email: "",
         password: "",
         passwordConfirmation: "",
-        jwt:"",
+        token: "",
 
-        userLogin: null,
-        userRegister: null,
+        userLogin: false,
+        userRegister: false,
     }),
 
     actions: {
@@ -26,20 +27,26 @@ export const useAuth = defineStore("auth", {
 
                 this.userRegister = register.data.user;
                 return true;
-            } catch (err:any) {
-                console.log(err)
+            } catch (err: any) {
+                console.log(err);
                 return false;
             }
         },
 
         async loginUser() {
             try {
-                const response = await axios.post('https://storytime-api.strapi.timedoor-js.web.id//api/auth/local', {
+                const response = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local', {
                     identifier: this.username || this.email,
                     password: this.password
                 });
 
-                this.userLogin = response.data.user;
+                const { jwt, user } = response.data;
+                this.token = jwt;
+                this.userLogin = true;
+
+                // Simpan token di cookies
+                Cookies.set("jwt", jwt, { expires: 1 }); // Token kadaluarsa dalam 1 hari
+
                 return true;
             } catch (err: any) {
                 console.log(err);
@@ -47,9 +54,18 @@ export const useAuth = defineStore("auth", {
             }
         },
 
-        async Logout() {
-            this.userLogin = null;
-            return true;
+        checkAuth() {
+            const token = Cookies.get('jwt');
+            if (token) {
+                this.token = token;
+                this.userLogin = true;
+            }
+        },
+
+        async logout() {
+            this.token = "";
+            this.userLogin = false;
+            Cookies.remove('jwt');
         }
     },
 });

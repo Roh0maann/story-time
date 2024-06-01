@@ -30,7 +30,7 @@ useHead({
     title: "Login | Story Time"
 });
 
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useAuth } from '~/stores/auth';
 import { useRouter } from 'vue-router';
 
@@ -63,4 +63,8 @@ const login = async () => {
         console.error("Login error", err);
     }
 };
+
+onMounted(() => {
+    authStore.checkAuth();
+});
 </script>

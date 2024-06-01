@@ -32,7 +32,7 @@ const authStore = useAuth();
 const router = useRouter();
 
 const logout = async () => {
-    await authStore.Logout();
+    await authStore.logout();
     router.push('/login');
 }
 </script>
