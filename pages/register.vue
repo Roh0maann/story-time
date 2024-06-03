@@ -1,5 +1,5 @@
 <template>
-    <div class="" style="padding-top: 8%; padding-bottom: 10%">
+    <div class="" style="padding-top: 8%; padding-bottom: 6%">
         <div class="container">
             <div class="row justify-content-center ">
                 <div class="col-lg-5">
@@ -32,6 +32,21 @@
                         </div>
                     </form>
                 </div>
+                
+                
+                <!-- <div class="col-lg-5 d-flex justify-content-center flex-column text-center">
+                    <div class="mb-4">
+                        <img class="w-75 m-0 p-0" src="/assets/images/success.svg" alt="">
+                    </div>
+                    <div class="m-0 p-0 fw-bolder">
+                        <h2>REGISTRATION SUCCESS</h2>
+                    </div>
+                    <div>
+                        <NuxtLink to="/login" class="btn btn-dark text-white fs-5 rounded-0 px-4 w-25" type="submit">
+                            Login
+                        </NuxtLink>
+                    </div>
+                </div> -->
             </div>
         </div>
     </div>

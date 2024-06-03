@@ -11,8 +11,7 @@
             <div class="col-4">
                 <div class="" style="width: 200px;">
                     <div class="mb-4">
-                        <img class="w-100 h-100 object-fit-cover rounded-circle" src="https://via.placeholder.com/150"
-                            alt="">
+                        <img class="w-100 h-100 object-fit-cover rounded-circle" :src="profileStore.img" alt="">
                     </div>
                     <button class="py-1 px-3 btn btn-outline-dark rounded-0 w-100 " style="font-size: 16px;">
                         Change Avatar
@@ -26,24 +25,22 @@
                         <p>Email</p>
                         <p>Biodata</p>
                     </div>
-
                     <div class="text-secondary fw-normal w-100">
-                        <p>{{ profile.name }}</p>
-                        <p>{{ profile.email }}</p>
-                        <p>{{ profile.biodata }}</p>
+                        <p>{{ profileStore.name }}</p>
+                        <p>{{ profileStore.email }}</p>
+                        <p>{{ profileStore.biodata }}</p>
                     </div>
                 </div>
-
                 <div v-if="isEditing">
                     <form @submit.prevent="saveProfile">
                         <div class="mb-3">
-                            <UiBase-Input name="name" type="text" label="Name" placeholder="Enter your name" identity="name" v-model="profile.name" />
+                            <UiBase-Input name="name" type="text" label="Name" placeholder="Enter your name" identity="name" v-model="profileStore.name" />
                         </div>
                         <div class="mb-3">
-                            <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email" identity="email" v-model="profile.email" :disabled="true" />
+                            <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email" identity="email" v-model="profileStore.email" :disabled="true" />
                         </div>
                         <div class="mb-3">
-                            <UiBase-Text-Area name="aboutMe" label="About me" placeholder="Enter about me" identity="aboutMe" v-model="profile.biodata" />
+                            <UiBase-Text-Area name="aboutMe" label="About me" placeholder="Enter about me" identity="aboutMe" v-model="profileStore.biodata" />
                         </div>
                         <div class="d-flex justify-content-end">
                             <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" @click="cancelEditing">Cancel</UiBase-Button>
@@ -57,13 +54,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useProfile } from '~/stores/profile';
 
 const isEditing = ref(false);
-const profile = ref({
-    name: 'Ezy',
-    email: 'Ezy@gmail.com',
-    biodata: 'Hi'
+const profileStore = useProfile();
+
+onMounted(async () => {
+    await profileStore.profileUser();
 });
 
 function startEditing() {
@@ -74,7 +72,13 @@ function cancelEditing() {
     isEditing.value = false;
 }
 
-function saveProfile() {
+async function saveProfile() {
+    await profileStore.editUser({
+        name: profileStore.name,
+        email: profileStore.email,
+        biodata: profileStore.biodata
+    });
+
     isEditing.value = false;
 }
 </script>

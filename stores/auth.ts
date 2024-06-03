@@ -40,7 +40,7 @@ export const useAuth = defineStore("auth", {
                     password: this.password
                 });
 
-                const { jwt, user } = response.data;
+                const { jwt, user } = response.data.data;
                 this.token = jwt;
                 this.userLogin = true;
 
