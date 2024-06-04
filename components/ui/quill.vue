@@ -1,33 +1,17 @@
 <template>
-  <label class="form-label">{{ label }}</label>
-  <client-only>
-      <QuillEditor v-model="content" :options="editorOptions" />
-  </client-only>
+    <QuillEditor  :options="editorOptions" contentType="html"/>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const props = defineProps({
-  label: {
-      type: String,
-      required: true
-  },
-  placeholder: {
-      type: String,
-      required: true
-  }
-});
-
-const content = ref('');
 const toolbarOptions = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],  
   ['bold', 'italic', 'underline', 'link'],             // ['bold', 'italic', 'underline', 'strike'],   // toggled buttons
   // ['blockquote', 'code-block'],
   // ['link', 'image', 'video', 'formula'],
-  // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  // [{ 'header':  1 }, { 'header': 2 }],               // custom button values
   [{ 'list': 'ordered'}, { 'list': 'bullet' }],        // [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
   // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
   // [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
@@ -43,7 +27,7 @@ const editorOptions = {
   modules: {
       toolbar: toolbarOptions,
   },
-  placeholder: props.placeholder,
+  placeholder: 'Insert text here ...',
   theme: 'snow',
   readOnly: false,
 };

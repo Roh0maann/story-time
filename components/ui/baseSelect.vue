@@ -20,6 +20,7 @@ const props = defineProps({
     modelValue: { type: [String, Number] },
 });
 
+const emit = defineEmits(['update:modelValue']);
 const internalValue = ref(props.modelValue || props.data[0]);
 const isOptionSelected = ref(internalValue.value !== props.data[0]);
 

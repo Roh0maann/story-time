@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { defineStore } from 'pinia';
+import Cookies from 'js-cookie';
 
-export const useStory =  defineStore("store", {
+export const useStory = defineStore("store", {
     state: () => ({
         storyList: [],
         storyListDetail: {},
@@ -31,9 +33,35 @@ export const useStory =  defineStore("store", {
             try {
                 const {data} = await axios.get (`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`);
                 this.storyListDetail = data.data;
-            }catch (err){
+            } catch (err) {
                 console.log(err)
             }
         },
+
+        async addStory(title: string, content: string, category: string, image: File | null) {
+            try {
+                const token = Cookies.get('jwt');
+                if (!token) throw new Error('No token found');
+
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('content', content);
+                formData.append('category', category);
+                if (image) {
+                    formData.append('image', image);
+                }
+
+                const add = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/stories', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                return add.data;
+            } catch (err) {
+                console.log(err)
+            }
+        }
     },
 })

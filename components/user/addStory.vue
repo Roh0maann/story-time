@@ -16,7 +16,8 @@
                     <UiBase-Select v-model="category" :data="categoryOptions" label="Category" identity="category" />
                 </div> 
                 <div class="mb-3">
-                    <UiQuill v-model="content" label="Content" placeholder="Insert text here ..."></UiQuill>
+                    <label class="form-label">Content</label>
+                    <UiQuill v-model:content="content"></UiQuill>
                 </div>
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Cover Image</label>
@@ -52,17 +53,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStory } from '~/stores/store';
 import { useCategory } from '~/stores/category';
 
 const router = useRouter();
+const categoryStore = useCategory();
+const storyStore = useStory();
 
 const title = ref('');
 const content = ref('');
 const category = ref('');
 const image = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
-
-const categoryStore = useCategory();
 const categoryOptions = ref<string[]>(['Select a category']); // Default option
 
 onMounted(async () => {
@@ -74,8 +76,18 @@ function batalAdd() {
     router.push('/user/story');
 }
 
-function saveStory() {
-    // Logika untuk menyimpan cerita
+async function saveStory() {
+    try {
+        await storyStore.addStory(title.value, content.value, category.value, image.value);
+        console.log(title.value);
+        console.log(content.value);
+        console.log(category.value);
+        console.log(image.value);
+        
+        router.push('/user/story');
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 function onImageChange(file: File) {

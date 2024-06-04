@@ -2,7 +2,8 @@
     <div class="" style="padding-top: 8%; padding-bottom: 6%">
         <div class="container">
             <div class="row justify-content-center ">
-                <div class="col-lg-5">
+                <!-- Form Register -->
+                <div v-if="!registrationSuccess" class="col-lg-5">
                     <form @submit.prevent="register" class=" p-4 shadow">
                         <h4>Register</h4>
                         <div class="mt-3">
@@ -32,9 +33,9 @@
                         </div>
                     </form>
                 </div>
-                
-                
-                <!-- <div class="col-lg-5 d-flex justify-content-center flex-column text-center">
+
+                <!-- Registration Success Message -->
+                <div v-if="registrationSuccess" name="registrasi success" class="col-lg-5 d-flex justify-content-center flex-column text-center">
                     <div class="mb-4">
                         <img class="w-75 m-0 p-0" src="/assets/images/success.svg" alt="">
                     </div>
@@ -46,7 +47,7 @@
                             Login
                         </NuxtLink>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
@@ -59,10 +60,9 @@ useHead({
 
 import { ref, computed } from 'vue';
 import { useAuth } from '~/stores/auth';
-import { useRouter } from 'vue-router';
 
 const authStore = useAuth();
-const router = useRouter();
+const registrationSuccess = ref(false);
 
 const isPasswordVisible = ref(false);
 const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));
@@ -84,8 +84,7 @@ const register = async () => {
     try {
         const success = await authStore.registerUser();
         if (success) {
-            alert("Register berhasil");
-            router.push("/login");
+            registrationSuccess.value = true;
         } else {
             alert("Register failed");
         }

@@ -4,7 +4,10 @@
         <div class="">
             <div class="mx-auto my-3" style="height: 70px; width: 70px;">
                 <img v-if="data.author" class="w-100 h-100 rounded-circle object-fit-cover "
-                    :src="urlBase + data.author?.profile_picture?.formats?.thumbnail?.url" alt="">
+                    :src="data.author?.profile_picture?.formats?.thumbnail?.url 
+                    ? urlBase + data.author?.profile_picture?.formats?.thumbnail?.url 
+                    : 'https://via.placeholder.com/150'" 
+                alt="">
             </div>
             <h3 v-if="data.author" class="mb-3 p-0 " style="font-size: 16px;">{{ data.author?.username }}</h3>
             <h5 v-if="data.author" class="text-secondary fw-normal m-0 p-0" style="font-size: 14px;">{{
