@@ -55,7 +55,31 @@ export const useStory = defineStore("store", {
                     },
                 });
 
-                return add.data;
+                return add.data.data.id;
+            } catch (err) {
+                console.log(err)
+            }
+        },
+
+        async addImg(image:any, id:any) {
+            try {
+                const token = Cookies.get('jwt');
+                if (!token) throw new Error('No token found');
+
+                const formImg = new FormData();
+                formImg.append('files', image);
+                formImg.append('refId', id);
+                formImg.append('ref', 'api::story.story');
+                formImg.append('field', 'cover_image');
+
+                const addImg = await axios.post('https://storytime-api.strapi.timedoor-js.web.id//api/upload', formImg, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }) 
+
+                return addImg.data.data;
             } catch (err) {
                 console.log(err)
             }

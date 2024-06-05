@@ -63,8 +63,8 @@ const storyStore = useStory();
 const title = ref('');
 const content = ref('');
 const category = ref('');
-const image = ref<File | null>(null);
-const imageUrl = ref<string | null>(null);
+const image = ref('');
+const imageUrl = ref('');
 
 const listCategory = computed(() => {
     return categoryStore.categoryList;
@@ -80,20 +80,21 @@ function batalAdd() {
 
 async function saveStory() {
     try {
-        await storyStore.addStory(title.value, content.value, category.value);
+        const id = await storyStore.addStory(title.value, content.value, category.value);
+        await storyStore.addImg(image.value, id);
         router.push('/user/story');
     } catch (err) {
         console.log(err);
     }
 }
 
-function onImageChange(file: File) {
-    image.value = file;
+function onImageChange(file :any) {
+    image.value = file; 
     imageUrl.value = URL.createObjectURL(file);
 }
 
 function removeImage() {
-    image.value = null;
-    imageUrl.value = null;
+    image.value = '';
+    imageUrl.value = '';
 }
 </script>
