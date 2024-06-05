@@ -91,7 +91,7 @@ async function saveStory() {
 }
 
 function onImageChange(file: File) {
-    image.value = file;
+    image.value = file; 
     imageUrl.value = URL.createObjectURL(file);
 }
 
