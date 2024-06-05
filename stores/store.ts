@@ -38,7 +38,7 @@ export const useStory = defineStore("store", {
             }
         },
 
-        async addStory(title: string, content: string, category: string, image: File | null) {
+        async addStory(title: any, content: any, category: any) {
             try {
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
@@ -47,9 +47,6 @@ export const useStory = defineStore("store", {
                 formData.append('title', title);
                 formData.append('content', content);
                 formData.append('category', category);
-                if (image) {
-                    formData.append('image', image);
-                }
 
                 const add = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/stories', formData, {
                     headers: {

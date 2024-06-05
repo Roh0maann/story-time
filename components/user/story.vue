@@ -14,34 +14,46 @@
                 <p class="p-0 mt-3 fw-semibold " style="font-size: 24px;">No data found</p>
             </div>
         </div>
-        <!-- <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                </tr>
-            </tbody>
-        </table> -->
+        <!-- <div class="mt-4 mb-3">
+            <table class="table">
+                <thead>
+                    <tr class="table-group-divider">
+                        <th scope="col">#</th>
+                        <th scope="col" style="width: 50%;">Title</th>
+                        <th scope="col">Last Update</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider align-content-center align-items-center">
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>00:42, 01 jun 2024</td>
+                        <td>
+                            <UiBase-Button class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" ><i class="fa-solid fa-pen"></i> Edit</UiBase-Button>
+                            <UiBase-Button class="btn btn-outline-danger rounded-0 py-1 px-3 fs-6" ><i class="fa-solid fa-trash-can"></i> Delete</UiBase-Button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>00:42, 01 jun 2024</td>
+                        <td>
+                            <UiBase-Button class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" ><i class="fa-solid fa-pen"></i> Edit</UiBase-Button>
+                            <UiBase-Button class="btn btn-outline-danger rounded-0 py-1 px-3 fs-6" ><i class="fa-solid fa-trash-can"></i> Delete</UiBase-Button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry the Bird</td>
+                        <td>00:42, 01 jun 2024</td>
+                        <td>
+                            <UiBase-Button class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" ><i class="fa-solid fa-pen"></i> Edit</UiBase-Button>
+                            <UiBase-Button class="btn btn-outline-danger rounded-0 py-1 px-3 fs-6" ><i class="fa-solid fa-trash-can"></i> Delete</UiBase-Button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
     </div>
 </template>

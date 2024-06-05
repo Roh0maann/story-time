@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 export const useCategory = defineStore("category", {
     state: () => ({
-        categoryList: [] as string[],
+        categoryList: [],
     }),
     actions: {
         async fetchCategories() {
@@ -11,7 +11,7 @@ export const useCategory = defineStore("category", {
                 const response = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/categories');
                 const categories = response.data.data;
 
-                this.categoryList = categories.map((category: any) => category.name);
+                this.categoryList = categories;
             } catch (error) {
                 console.log('Error fetching categories:', error);
             }

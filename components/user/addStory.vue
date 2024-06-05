@@ -12,9 +12,9 @@
                 <div class="mb-3">
                     <UiBase-Input v-model="title" name="title" type="text" label="Title" placeholder="Enter a story title" identity="title" />
                 </div>
-                <div class="mb-3"> 
-                    <UiBase-Select v-model="category" :data="categoryOptions" label="Category" identity="category" />
-                </div> 
+                <div class="mb-3">
+                    <UiBase-Select v-model="category" :data="listCategory" label="Category" identity="category" />
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
                     <UiQuill v-model:content="content"></UiQuill>
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStory } from '~/stores/store';
 import { useCategory } from '~/stores/category';
@@ -65,11 +65,13 @@ const content = ref('');
 const category = ref('');
 const image = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
-const categoryOptions = ref<string[]>(['Select a category']); // Default option
+
+const listCategory = computed(() => {
+    return categoryStore.categoryList;
+});
 
 onMounted(async () => {
     await categoryStore.fetchCategories();
-    categoryOptions.value = ['Select a category', ...categoryStore.categoryList];
 });
 
 function batalAdd() {
@@ -78,12 +80,7 @@ function batalAdd() {
 
 async function saveStory() {
     try {
-        await storyStore.addStory(title.value, content.value, category.value, image.value);
-        console.log(title.value);
-        console.log(content.value);
-        console.log(category.value);
-        console.log(image.value);
-        
+        await storyStore.addStory(title.value, content.value, category.value);
         router.push('/user/story');
     } catch (err) {
         console.log(err);
@@ -91,7 +88,7 @@ async function saveStory() {
 }
 
 function onImageChange(file: File) {
-    image.value = file; 
+    image.value = file;
     imageUrl.value = URL.createObjectURL(file);
 }
 
