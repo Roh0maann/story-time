@@ -92,17 +92,37 @@ export const useStory = defineStore("store", {
                 
                 if (!token) throw new Error('No token found');
         
-                const response = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?author=${userId}`, {
+                const userStory = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?author=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                this.storyList = response.data.data;
+                this.storyList = userStory.data.data;
             } catch (err) {
                 console.log(err);
             }
         },        
         
+        async deleteUserStory(storyId: any) {
+            try {
+                const token = Cookies.get('jwt');
+                if (!token) throw new Error('No token found');
+        
+                await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${storyId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+        
+                const index = this.storyList.findIndex(story => story.id === storyId);
+                    if (index !== -1) {
+                    this.storyList.splice(index, 1);
+                }
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
         
     },
 })
