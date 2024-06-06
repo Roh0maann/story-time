@@ -83,6 +83,26 @@ export const useStory = defineStore("store", {
             } catch (err) {
                 console.log(err)
             }
-        }
+        },
+
+        async getUserStory() {
+            try {
+                const token = Cookies.get('jwt');
+                const userId = Cookies.get('userID');
+                
+                if (!token) throw new Error('No token found');
+        
+                const response = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?author=${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                this.storyList = response.data.data;
+            } catch (err) {
+                console.log(err);
+            }
+        },        
+        
+        
     },
 })

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
+import { use } from 'chai';
 
 export const useAuth = defineStore("auth", {
     state: () => ({
@@ -10,6 +11,7 @@ export const useAuth = defineStore("auth", {
         password: "",
         passwordConfirmation: "",
         token: "",
+        userId: "",
 
         userLogin: false,
         userRegister: false,
@@ -35,37 +37,40 @@ export const useAuth = defineStore("auth", {
 
         async loginUser() {
             try {
-                const response = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local', {
+                const {data} = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local', {
                     identifier: this.username || this.email,
                     password: this.password
                 });
-
-                const { jwt, user } = response.data.data;
-                this.token = jwt;
+        
+                this.token = data.data.jwt;
+                this.userId = data.data.user.id;
                 this.userLogin = true;
-
+                
                 // Simpan token di cookies
-                Cookies.set("jwt", jwt, { expires: 1 }); // Token kadaluarsa dalam 1 hari
-
+                Cookies.set("jwt", this.token, { expires: 1 });
+                Cookies.set("userID", this.userId, { expires: 1 });
                 return true;
             } catch (err: any) {
                 console.log(err);
                 return false;
             }
         },
+        
 
         checkAuth() {
             const token = Cookies.get('jwt');
             if (token) {
-                this.token = token;
+                this.token = token; 
                 this.userLogin = true;
             }
         },
 
         async logout() {
             this.token = "";
+            this.userId = "";
             this.userLogin = false;
             Cookies.remove('jwt');
+            Cookies.remove('userID');
         }
     },
 });
