@@ -32,7 +32,13 @@ const authStore = useAuth();
 const router = useRouter();
 
 const logout = async () => {
-    await authStore.logout();
-    router.push('/login');
+    if (confirm('yakin mau logout ?')) {
+        try {
+            await authStore.logout();
+            router.push('/login');
+        } catch (error) {
+            console.error('Failed to logout', error);
+        }
+    }
 }
 </script>

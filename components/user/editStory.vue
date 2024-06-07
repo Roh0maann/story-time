@@ -12,11 +12,12 @@
                 <div class="mb-3">
                     <UiBase-Input v-model="title" name="title" type="text" label="Title" placeholder="Enter a story title" identity="title" />
                 </div>
-                <div class="mb-3"> 
-                    <UiBase-Select v-model="category" :data="['Select a category', 'Comedy', 'Horror', 'Romance']" label="Category" identity="category" />
-                </div> 
                 <div class="mb-3">
-                    <UiQuill v-model="content" label="Content" placeholder="Insert text here ..."></UiQuill>
+                    <UiBase-Select v-model="category" :data="listCategory" label="Category" identity="category" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Content</label>
+                    <UiQuill v-model:content="content"></UiQuill>
                 </div>
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Cover Image</label>
@@ -50,33 +51,81 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import UiBaseInput from '@/components/ui/baseInput.vue'; 
+import { ref, onMounted, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useStory } from '~/stores/store';
+import { useCategory } from '~/stores/category';
 
 const router = useRouter();
+const route = useRoute();
+const categoryStore = useCategory();
+const storyStore = useStory();
+
+const storyId = route.params.id;
 
 const title = ref('');
 const content = ref('');
-const category = ref('Select a category');
+const category = ref('');
 const image = ref<File | null>(null);
-const imageUrl = ref<string | null>(null);
+const imageUrl = ref('');
+
+const listCategory = computed(() => {
+    return categoryStore.categoryList;
+});
+
+onMounted(async () => {
+    await categoryStore.fetchCategories();
+    await fetchStoryDetails();
+});
+
+async function fetchStoryDetails() {
+    try {
+        await storyStore.getStoryDetail(storyId);
+        const story = storyStore.storyListDetail;
+
+        if (story) {
+            console.log('Story details:', story);  // Add this line
+            title.value = story.title || '';
+            content.value = story.content || '';
+            category.value = story.category ? story.category.id : '';
+            imageUrl.value = story.cover_image ? story.cover_image.url : '';
+        } else {
+            console.log('No story details found');
+        }
+    } catch (err) {
+        console.error('Error fetching story details:', err);  // Change to console.error
+    }
+}
 
 function batalAdd() {
     router.push('/user/story');
 }
 
-function saveStory() {
-    // Logika untuk menyimpan cerita
+async function saveStory() {
+    try {
+        await storyStore.updateStory(storyId, title.value, content.value, category.value);
+
+        if (image.value) {
+            if (imageUrl.value) {
+                await storyStore.deleteImg(storyId);
+            }
+
+            await storyStore.addImg(image.value, storyId);
+        }
+
+        router.push('/user/story');
+    } catch (err) {
+        console.error('Error saving story:', err);  // Change to console.error
+    }
 }
 
 function onImageChange(file: File) {
-    image.value = file;
+    image.value = file; 
     imageUrl.value = URL.createObjectURL(file);
 }
 
 function removeImage() {
     image.value = null;
-    imageUrl.value = null;
+    imageUrl.value = '';
 }
 </script>

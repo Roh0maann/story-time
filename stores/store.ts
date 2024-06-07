@@ -9,18 +9,17 @@ export const useStory = defineStore("store", {
     }),
 
     actions: {
-        async fetchStoryList(page:any, keyword = '') {
+        async fetchStoryList(page: any, keyword = '') {
             try {
-                const infos = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id//api/stories?keyword=${keyword}&author&page=${page}`);
-
+                const infos = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?keyword=${keyword}&author&page=${page}`);
                 if (page === 1) {
                     this.storyList = [];
                 }
-                
+
                 const newInfos = infos.data.data;
                 for (const item of newInfos) {
                     const isExisting = this.storyList.find(existing => existing.id === item.id);
-                    if(!isExisting) {
+                    if (!isExisting) {
                         this.storyList.push(item);
                     }
                 }
@@ -29,9 +28,9 @@ export const useStory = defineStore("store", {
             }
         },
 
-        async getStoryDetail(id:any) {
+        async getStoryDetail(id: any) {
             try {
-                const {data} = await axios.get (`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`);
+                const { data } = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`);
                 this.storyListDetail = data.data;
             } catch (err) {
                 console.log(err)
@@ -61,7 +60,7 @@ export const useStory = defineStore("store", {
             }
         },
 
-        async addImg(image:any, id:any) {
+        async addImg(image: any, id: any) {
             try {
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
@@ -72,12 +71,12 @@ export const useStory = defineStore("store", {
                 formImg.append('ref', 'api::story.story');
                 formImg.append('field', 'cover_image');
 
-                const addImg = await axios.post('https://storytime-api.strapi.timedoor-js.web.id//api/upload', formImg, {
+                const addImg = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/upload', formImg, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
                     },
-                }) 
+                })
 
                 return addImg.data.data;
             } catch (err) {
@@ -89,9 +88,9 @@ export const useStory = defineStore("store", {
             try {
                 const token = Cookies.get('jwt');
                 const userId = Cookies.get('userID');
-                
+
                 if (!token) throw new Error('No token found');
-        
+
                 const userStory = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?author=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -99,30 +98,68 @@ export const useStory = defineStore("store", {
                 });
                 this.storyList = userStory.data.data;
             } catch (err) {
-                console.log(err);
+                console.log(err)
             }
-        },        
-        
-        async deleteUserStory(storyId: any) {
+        },
+
+        async deleteStory(id: any) {
             try {
                 const token = Cookies.get('jwt');
+
                 if (!token) throw new Error('No token found');
-        
-                await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${storyId}`, {
+
+                const deleteStory = await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-        
-                const index = this.storyList.findIndex(story => story.id === storyId);
-                    if (index !== -1) {
-                    this.storyList.splice(index, 1);
-                }
-
+                this.storyList = this.storyList.filter(item => item.id !== id);
             } catch (err) {
-                console.log(err);
+                console.log(err)
             }
-        }
-        
-    },
-})
+        },
+
+        async updateStory(id: any, title: any, content: any, category: any) {
+            try {
+                const token = Cookies.get('jwt');
+                if (!token) throw new Error('No token found');
+
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('content', content);
+                formData.append('category', category);
+
+                const update = await axios.put(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                return update.data.data.id;
+            } catch (err) {
+                console.log(err)
+            }
+        },
+
+        async deleteImg(id: any) {
+            try {
+                const token = Cookies.get('jwt');
+
+                if (!token) throw new Error('No token found');
+
+                const imageId = this.storyListDetail.cover_image.id;
+
+                const deleteImg = await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/upload/files/${imageId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                return deleteImg.data;
+            } catch (err) {
+                console.log(err)
+            }
+        },
+    }
+});
