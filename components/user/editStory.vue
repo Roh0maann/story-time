@@ -83,17 +83,18 @@ async function fetchStoryDetails() {
         await storyStore.getStoryDetail(storyId);
         const story = storyStore.storyListDetail;
 
-        if (story) {
-            console.log('Story details:', story);  // Add this line
-            title.value = story.title || '';
-            content.value = story.content || '';
-            category.value = story.category ? story.category.id : '';
-            imageUrl.value = story.cover_image ? story.cover_image.url : '';
-        } else {
-            console.log('No story details found');
-        }
+        title.value = story.title;
+        content.value = story.content;
+        category.value = story.category ? story.category.id : '';
+        imageUrl.value = story.cover_image ? story.cover_image.url : '';
+
+        console.log(imageUrl.value);
+        console.log(category.value);
+        console.log(content.value);
+        console.log(title.value);
+        
     } catch (err) {
-        console.error('Error fetching story details:', err);  // Change to console.error
+        console.error('Error fetching story details:', err);
     }
 }
 
@@ -115,7 +116,7 @@ async function saveStory() {
 
         router.push('/user/story');
     } catch (err) {
-        console.error('Error saving story:', err);  // Change to console.error
+        console.error('Error saving story:', err);
     }
 }
 

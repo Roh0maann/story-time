@@ -105,7 +105,6 @@ export const useStory = defineStore("store", {
         async deleteStory(id: any) {
             try {
                 const token = Cookies.get('jwt');
-
                 if (!token) throw new Error('No token found');
 
                 const deleteStory = await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, {
@@ -126,7 +125,7 @@ export const useStory = defineStore("store", {
 
                 const formData = new FormData();
                 formData.append('title', title);
-                formData.append('content', content);
+                formData.append('content', content); 
                 formData.append('category', category);
 
                 const update = await axios.put(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, formData, {
@@ -142,10 +141,9 @@ export const useStory = defineStore("store", {
             }
         },
 
-        async deleteImg(id: any) {
+        async deleteImg(image: any , id: any) {
             try {
                 const token = Cookies.get('jwt');
-
                 if (!token) throw new Error('No token found');
 
                 const imageId = this.storyListDetail.cover_image.id;

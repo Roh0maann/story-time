@@ -11,8 +11,8 @@
 
         <div class="mt-5 mb-3" v-if="storyStore.storyList.length === 0">
             <div class="text-center">
-                <img class="me-4 empty-data-image" src="~/assets/images/empty-data.svg" alt="No data found" />
-                <p class="p-0 mt-3 fw-semibold empty-data-text">No data found</p>
+                <img class="me-4 empty-data-image" style="width: 20%;" src="~/assets/images/empty-data.svg" alt="No data found" />
+                <p class="p-0 mt-3 fw-semibold empty-data-text" style="font-size: 24px;">No data found</p>
             </div>
         </div>
 
