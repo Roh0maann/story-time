@@ -4,7 +4,7 @@
             {{ label }}
             <slot></slot>
         </label>
-        <Field :class="[{ 'd-none': isImage }, 'form-control', 'rounded-0']" :type="type" :id="identity"
+        <input :class="[{ 'd-none': isImage }, 'form-control', 'rounded-0']" :type="type" :id="identity"
             :placeholder="placeholder" :value="type === 'file' ? undefined : modelValue" :readonly="readonly === '1'"
             :disabled="disabled" :name="name" @input="handleInput" @change="handleChange" @keyup="handleKeyUp"
             @focus="handleFocus" />

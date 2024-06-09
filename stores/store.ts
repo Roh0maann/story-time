@@ -135,13 +135,15 @@ export const useStory = defineStore("store", {
                     },
                 });
 
+                console.log(id);
+                
                 return update.data.data.id;
             } catch (err) {
                 console.log(err)
             }
         },
 
-        async deleteImg(image: any , id: any) {
+        async deleteImg(id: any) {
             try {
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');

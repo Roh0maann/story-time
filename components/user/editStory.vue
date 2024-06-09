@@ -33,7 +33,7 @@
                     <div v-if="imageUrl" name="outputImage">
                         <div class="w-100 d-flex">
                             <div class="ms-4" style="width: 30%;">
-                                <img :src="imageUrl" class="w-100 h-100" alt="">
+                                <img :src="urlBase + imageUrl" class="w-100 h-100" alt="">
                             </div>
                             <button type="button" @click="removeImage" class="btn rounded-circle fs-4 d-flex justify-content-center align-items-center" style="width: 25px; height: 25px;">
                                 <i class="text-danger fa-solid fa-circle-xmark"></i>
@@ -62,6 +62,7 @@ const categoryStore = useCategory();
 const storyStore = useStory();
 
 const storyId = route.params.id;
+const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
 
 const title = ref('');
 const content = ref('');
@@ -88,13 +89,8 @@ async function fetchStoryDetails() {
         category.value = story.category ? story.category.id : '';
         imageUrl.value = story.cover_image ? story.cover_image.url : '';
 
-        console.log(imageUrl.value);
-        console.log(category.value);
-        console.log(content.value);
-        console.log(title.value);
-        
     } catch (err) {
-        console.error('Error fetching story details:', err);
+        console.error(err);
     }
 }
 
@@ -116,7 +112,7 @@ async function saveStory() {
 
         router.push('/user/story');
     } catch (err) {
-        console.error('Error saving story:', err);
+        console.error(err);
     }
 }
 
