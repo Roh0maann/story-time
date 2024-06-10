@@ -100,7 +100,15 @@ function batalAdd() {
 
 async function saveStory() {
     try {
-        await storyStore.updateStory(storyId, title.value, content.value, category.value);
+        const updatedData = {
+            data: {
+                title: title.value,
+                content: content.value,
+                category: category.value
+            }
+        };
+
+        await storyStore.updateStory(storyId, updatedData);
 
         if (image.value) {
             if (imageUrl.value) {

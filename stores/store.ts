@@ -118,19 +118,14 @@ export const useStory = defineStore("store", {
             }
         },
 
-        async updateStory(id: any, title: any, content: any, category: any) {
+        async updateStory(id: any, updatedData: any) {
             try {
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
-                const formUpdate = new FormData();
-                formUpdate.append('title', title);
-                formUpdate.append('content', content); 
-                formUpdate.append('category', category);
-
-                const update = await axios.put(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, formUpdate, {
+                const update = await axios.put(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, updatedData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
                 });
