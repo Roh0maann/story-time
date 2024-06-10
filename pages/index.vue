@@ -4,9 +4,16 @@
 </template>
 
 <script setup>
-
 useHead({
     title: "Story Time"
 })
 
+import { onMounted } from 'vue';
+import { useProfile } from '~/stores/profile';
+
+const profileStore = useProfile();
+
+onMounted(() => {
+    profileStore.loadBookmarks();
+});
 </script>

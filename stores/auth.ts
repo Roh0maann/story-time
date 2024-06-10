@@ -2,6 +2,7 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { use } from 'chai';
+import { useProfile } from '~/stores/profile';
 
 export const useAuth = defineStore("auth", {
     state: () => ({
@@ -71,6 +72,10 @@ export const useAuth = defineStore("auth", {
             this.userLogin = false;
             Cookies.remove('jwt');
             Cookies.remove('userID');
+
+
+            const profileStore = useProfile();
+            profileStore.clearBookmarks();
         }
     },
 });

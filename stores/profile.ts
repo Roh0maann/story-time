@@ -8,7 +8,17 @@ export const useProfile = defineStore("profiles", {
         email: "",
         biodata: "",
         img: "",
+        bookmarks: [],
     }),
+
+    getters: {
+        isBookmarked: (state) => (id: any) => {
+            return state.bookmarks.some(item => item.id === id);
+        },
+        getBookmarks: (state) => {
+            return state.bookmarks;
+        }
+    },
 
     actions: {
         async profileUser() {
@@ -16,7 +26,6 @@ export const useProfile = defineStore("profiles", {
                 const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
                 const token = Cookies.get('jwt'); // Ambil token dari cookies
                 if (!token) throw new Error('No token found');
-
 
                 const profile = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/users/me', {
                     headers: {
@@ -52,5 +61,38 @@ export const useProfile = defineStore("profiles", {
             }
         },
         
+        /* Untuk bookmark */
+        toggleBookmark(story: any) {
+            const index = this.bookmarks.findIndex(item => item.id === story.id);
+            if (index === -1) {
+                this.bookmarks.push(story);
+            } else {
+                this.bookmarks.splice(index, 1);
+            }
+            this.saveBookmarks();
+        },
+    
+        saveBookmarks() {
+            const token = Cookies.get('jwt');
+            if (token) {
+                const userId = Cookies.get('userID');
+                localStorage.setItem(`bookmarks_${userId}`, JSON.stringify(this.bookmarks));
+            }
+        },
+    
+        loadBookmarks() {
+            const userId = Cookies.get('userID');
+            const savedBookmarks = localStorage.getItem(`bookmarks_${userId}`);
+            if (savedBookmarks) {
+                this.bookmarks = JSON.parse(savedBookmarks);
+            }
+        },
+    
+        clearBookmarks() {
+            const userId = Cookies.get('userID');
+            localStorage.removeItem(`bookmarks_${userId}`);
+            this.bookmarks = [];
+        },
+        /* Untuk bookmark */
     },
 });

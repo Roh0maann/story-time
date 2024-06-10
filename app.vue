@@ -5,3 +5,14 @@
     </NuxtLayout>
   </div>
 </template>
+
+<script setup>
+import { onMounted } from 'vue';
+import { useProfile } from '~/stores/profile';
+
+const profileStore = useProfile();
+
+onMounted(() => {
+    profileStore.loadBookmarks();
+});
+</script>

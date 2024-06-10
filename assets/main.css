@@ -4,3 +4,14 @@
     -webkit-box-orient: vertical;  
     overflow: hidden;
 }
+
+.bookmark-icon {
+    visibility: hidden;
+    transition: visibility 0.3s, opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.hover-card:hover .bookmark-icon {
+    visibility: visible;
+    opacity: 1;
+}
