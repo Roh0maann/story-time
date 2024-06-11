@@ -11,7 +11,8 @@
 
         <div class="mt-5 mb-3" v-if="storyStore.storyList.length === 0">
             <div class="text-center">
-                <img class="me-4 empty-data-image" style="width: 20%;" src="~/assets/images/empty-data.svg" alt="No data found" />
+                <img class="me-4 empty-data-image" style="width: 20%;" src="~/assets/images/empty-data.svg"
+                    alt="No data found" />
                 <p class="p-0 mt-3 fw-semibold empty-data-text" style="font-size: 24px;">No data found</p>
             </div>
         </div>
@@ -38,7 +39,7 @@
                                 <i class="fa-solid fa-pen"></i> Edit
                             </NuxtLink>
                             <UiBase-Button class="btn btn-outline-danger rounded-0 py-1 px-3 btn-delete"
-                                @click="deleteStory(story.id)">
+                                data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deletId(story.id)">
                                 <i class="fa-solid fa-trash-can"></i> Delete
                             </UiBase-Button>
                         </td>
@@ -46,6 +47,25 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Story</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to delet this story?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal">Cancle</button>
+                    <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal" @click="deleteStory()">Delete</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -58,21 +78,27 @@ import { formatDateStory } from '~/helpers/dateFormat';
 
 const authStore = useAuth();
 const storyStore = useStory();
+const storyIdDelete = ref('')
 
 onMounted(async () => {
     try {
         await storyStore.getUserStory();
     } catch (error) {
-        console.error('Failed to fetch stories:', error);
+        console.error(error);
     }
 });
 
-const deleteStory = async (storyId) => {
-    if (confirm('yakin mau hapus ?')) {
+const deletId = (storyId) => {
+    storyIdDelete.value = storyId;
+};
+
+const deleteStory = async () => {
+    if (storyIdDelete.value) {
         try {
-            await storyStore.deleteUserStory(storyId);
+            await storyStore.deleteStory(storyIdDelete.value);
+            storyIdDelete.value = null;
         } catch (error) {
-            console.error('Failed to delete story:', error);
+            console.error(error);
         }
     }
 };

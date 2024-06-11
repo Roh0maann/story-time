@@ -33,7 +33,7 @@
                     <div v-if="imageUrl" name="outputImage">
                         <div class="w-100 d-flex">
                             <div class="ms-4" style="width: 30%;">
-                                <img :src="urlBase + imageUrl" class="w-100 h-100" alt="">
+                                <img :src="imageSrc" class="w-100 h-100" alt="">
                             </div>
                             <button type="button" @click="removeImage" class="btn rounded-circle fs-4 d-flex justify-content-center align-items-center" style="width: 25px; height: 25px;">
                                 <i class="text-danger fa-solid fa-circle-xmark"></i>
@@ -133,4 +133,8 @@ function removeImage() {
     image.value = null;
     imageUrl.value = '';
 }
+
+const imageSrc = computed(() => {
+    return imageUrl.value.startsWith('blob:') ? imageUrl.value : urlBase + imageUrl.value;
+});
 </script>

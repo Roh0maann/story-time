@@ -64,12 +64,10 @@ const login = async (values) => {
     authStore.username = !values.identifier.includes('@') ? values.identifier : '';
     
     try {
-        console.log(JSON.stringify(authStore, null, 2));
         const success = await authStore.loginUser();
         if (success) {
             identifier.value = "";
             authStore.password = "";
-            alert("Login berhasil");
             router.push("/"); 
         } else {
             alert("Login gagal");

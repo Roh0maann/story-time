@@ -15,12 +15,31 @@
             </NuxtLink>
             <li class="user-menu d-flex align-items-center p-2 bg-light">
                 <div
-                    class="py-1 px-3 btn btn-outline-danger rounded-0 w-100 d-flex justify-content-between align-items-center" @click="logout()">
+                    class="py-1 px-3 btn btn-outline-danger rounded-0 w-100 d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Logout
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </div>
             </li>
         </ul>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal">Cancle</button>
+                    <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal" @click="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -32,13 +51,7 @@ const authStore = useAuth();
 const router = useRouter();
 
 const logout = async () => {
-    if (confirm('yakin mau logout ?')) {
-        try {
-            await authStore.logout();
-            router.push('/login');
-        } catch (error) {
-            console.error('Failed to logout', error);
-        }
-    }
+    await authStore.logout();
+    router.push('/');
 }
 </script>
