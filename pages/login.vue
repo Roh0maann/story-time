@@ -29,46 +29,45 @@
     </div>
 </template>
 
-<script setup lang="ts"> 
+<script setup lang="ts">
 useHead({
     title: "Login | Story Time"
 });
 
-import { ref, computed, onMounted } from 'vue';
-import { useAuth } from '~/stores/auth';
-import { useRouter } from 'vue-router';
-import { Form, Field, ErrorMessage } from 'vee-validate';
-import * as yup from 'yup';
+import { ref, computed, onMounted } from "vue";
+import { useAuth } from "~/stores/auth";
+import { useRouter } from "vue-router";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import * as yup from "yup";
 
-// Validasi schema
 const schema = yup.object({
-    identifier: yup.string().required('Email or username is required'),
-    password: yup.string().required('Password is required')
+    identifier: yup.string().required("Email or username is required"),
+    password: yup.string().required("Password is required")
 });
 
 const authStore = useAuth();
 const router = useRouter();
 
-const identifier = ref('');
+const identifier = ref("");
 
 const isPasswordVisible = ref(false);
-const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));
-const passwordIcon = computed(() => (isPasswordVisible.value ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'));
+const passwordFieldType = computed(() => (isPasswordVisible.value ? "text" : "password"));
+const passwordIcon = computed(() => (isPasswordVisible.value ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"));
 
 function togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
 }
 
 const login = async (values) => {
-    authStore.email = values.identifier.includes('@') ? values.identifier : '';
-    authStore.username = !values.identifier.includes('@') ? values.identifier : '';
-    
+    authStore.email = values.identifier.includes("@") ? values.identifier : "";
+    authStore.username = !values.identifier.includes("@") ? values.identifier : "";
+
     try {
         const success = await authStore.loginUser();
         if (success) {
             identifier.value = "";
             authStore.password = "";
-            router.push("/"); 
+            router.push("/");
         } else {
             alert("Login gagal");
         }

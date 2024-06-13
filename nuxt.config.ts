@@ -26,6 +26,7 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@vee-validate/nuxt',
+    'vue-cropperjs',
   ],
   plugins: [
     '~/plugins/vee-validate.ts',

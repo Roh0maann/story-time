@@ -3,22 +3,25 @@
         {{ label }}
         <slot></slot>
     </label>
-    <select class="form-select rounded-0" :id="identity" @input="handleInput" v-model="internalValue">
+    <Field :name="name" as="select" class="form-select rounded-0" :id="identity" @input="handleInput" v-model="internalValue">
         <option disabled value="">Select Category</option>
         <option v-for="(item, index) in data" :key="index" :value="item.id">
             {{ item.name }}
         </option>
-    </select>
+    </Field>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue';
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 
 const props = defineProps({
     label: { type: String, required: true },
     identity: { type: String, required: true },
     data: { type: Array, required: true },
     modelValue: { type: [String, Number, null], default: '' },
+    name: { type: String, required: true },
 });
 
 const emit = defineEmits(['update:modelValue']);

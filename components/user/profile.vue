@@ -2,7 +2,8 @@
     <div class="border shadow m-0 p-4 w-100 mb-4">
         <div class="d-flex justify-content-between align-items-center align-content-center">
             <h4 class="m-0 p-0">My Profile</h4>
-            <UiBase-Button v-if="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0" style="font-size: 16px; width: 17%;" @click="startEditing">
+            <UiBase-Button v-if="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0"
+                style="font-size: 16px; width: 17%;" @click="startEditing">
                 <i class="fa-regular fa-pen-to-square"></i>
                 Edit Profile
             </UiBase-Button>
@@ -13,9 +14,13 @@
                     <div class="mb-4">
                         <img class="w-100 h-100 object-fit-cover rounded-circle" :src="profileStore.img" alt="">
                     </div>
-                    <button class="py-1 px-3 btn btn-outline-dark rounded-0 w-100 " style="font-size: 16px;">
-                        Change Avatar
-                    </button>
+                    
+                    <div class="w-100">
+                        <UiBase-Input class="d-none" v-model="imageProfile" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
+                        <label for="inputImage" class="py-1 px-3 btn btn-outline-dark rounded-0 w-100 " data-bs-toggle="modal" data-bs-target="#cropper" style="font-size: 16px;">
+                            <p class="m-0 p-0">Change Avatar</p>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="col-8">
@@ -34,31 +39,64 @@
                 <div v-if="isEditing">
                     <form @submit.prevent="saveProfile">
                         <div class="mb-3">
-                            <UiBase-Input name="name" type="text" label="Name" placeholder="Enter your name" identity="name" v-model="profileStore.name" />
+                            <UiBase-Input name="name" type="text" label="Name" placeholder="Enter your name"
+                                identity="name" v-model="profileStore.name" />
                         </div>
                         <div class="mb-3">
-                            <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email" identity="email" v-model="profileStore.email" :disabled="true" />
+                            <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email"
+                                identity="email" v-model="profileStore.email" :disabled="true" />
                         </div>
                         <div class="mb-3">
-                            <UiBase-Text-Area name="aboutMe" label="About me" placeholder="Enter about me" identity="aboutMe" v-model="profileStore.biodata" />
+                            <UiBase-Text-Area name="aboutMe" label="About me" placeholder="Enter about me"
+                                identity="aboutMe" v-model="profileStore.biodata" />
                         </div>
                         <div class="d-flex justify-content-end">
-                            <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" @click="cancelEditing">Cancel</UiBase-Button>
-                            <UiBase-Button type="submit" class="btn btn-dark rounded-0 py-1 px-3 fs-6">Save</UiBase-Button>
+                            <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3"
+                                @click="cancelEditing">Cancel</UiBase-Button>
+                            <UiBase-Button type="submit"
+                                class="btn btn-dark rounded-0 py-1 px-3 fs-6">Save</UiBase-Button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class="modal" id="cropper" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Adjust Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="removeImage"></button>
+                    </div>
+                    <div class="modal-body">
+                        <vue-cropper v-if="imageUrlProfile" ref="cropper" :src="imageUrlProfile" :options="cropperOptions"></vue-cropper>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal"  @click="removeImage">Cancel</button>
+                        <button type="button" class="btn btn-dark rounded-0" @click="cropImage">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useProfile } from '~/stores/profile';
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 
 const isEditing = ref(false);
 const profileStore = useProfile();
+const imageProfile = ref('');
+const imageUrlProfile = ref('');
+
+const cropperOptions = {
+    aspectRatio: 1,
+    viewMode: 2,
+};
 
 onMounted(async () => {
     await profileStore.profileUser();
@@ -80,5 +118,25 @@ async function saveProfile() {
     });
 
     isEditing.value = false;
+}
+
+function onImageChange(file :any) {
+    imageProfile.value = file; 
+    imageUrlProfile.value = URL.createObjectURL(file);
+}
+
+function removeImage() {
+    imageProfile.value = '';
+    imageUrlProfile.value = '';
+}
+
+function cropImage() {
+    const cropper = this.$refs.cropper;
+    const croppedCanvas = cropper.getCroppedCanvas();
+    const croppedImage = croppedCanvas.toDataURL();
+
+    // Perform action with cropped image, e.g., upload to server
+    // Then close the modal
+    $('#cropper').modal('hide');
 }
 </script>
