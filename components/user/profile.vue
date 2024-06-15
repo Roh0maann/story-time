@@ -62,25 +62,25 @@
         </div>
     </div>
 
-
     <div class="modal" id="cropper" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Adjust Image</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="removeImage"></button>
-                    </div>
-                    <div class="modal-body">
-                        <vue-cropper v-if="imageUrlProfile" ref="cropper" :src="imageUrlProfile" :options="cropperOptions"></vue-cropper>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal"  @click="removeImage">Cancel</button>
-                        <button type="button" class="btn btn-dark rounded-0" @click="cropImage">Change</button>
-                    </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adjust Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="removeImage"></button>
+                </div>
+                <div class="modal-body">
+                    <vue-cropper v-if="imageUrlProfile" ref="cropper" :aspect-ratio="16 / 16" :src="imageUrlProfile" preview=".preview" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal" @click="removeImage">Cancel</button>
+                    <button type="button" class="btn btn-dark rounded-0" @click="cropImage">Change</button>
                 </div>
             </div>
         </div>
+    </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
@@ -92,11 +92,7 @@ const isEditing = ref(false);
 const profileStore = useProfile();
 const imageProfile = ref('');
 const imageUrlProfile = ref('');
-
-const cropperOptions = {
-    aspectRatio: 1,
-    viewMode: 2,
-};
+const cropper = ref<VueCropper | null>(null);
 
 onMounted(async () => {
     await profileStore.profileUser();
@@ -120,7 +116,7 @@ async function saveProfile() {
     isEditing.value = false;
 }
 
-function onImageChange(file :any) {
+function onImageChange(file: File) {
     imageProfile.value = file; 
     imageUrlProfile.value = URL.createObjectURL(file);
 }
@@ -130,13 +126,45 @@ function removeImage() {
     imageUrlProfile.value = '';
 }
 
-function cropImage() {
-    const cropper = this.$refs.cropper;
-    const croppedCanvas = cropper.getCroppedCanvas();
-    const croppedImage = croppedCanvas.toDataURL();
+async function cropImage() {
+    if (cropper.value) {
+        const croppedCanvas = cropper.value.getCroppedCanvas();
+        croppedCanvas.toBlob(async (blob) => {
+            if (blob) {
+                try {
+                    // Delete the existing profile picture first
+                    await profileStore.deleteImgProfile();
 
-    // Perform action with cropped image, e.g., upload to server
-    // Then close the modal
-    $('#cropper').modal('hide');
+                    // Perform the image upload
+                    const response = await profileStore.addImgProfile(blob);
+                    console.log(response);
+
+                    // Update the profile picture URL in the store
+                    profileStore.img = URL.createObjectURL(blob);
+
+                    // Close the modal
+                    const modal = document.getElementById('cropper');
+                    if (modal) {
+                        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                        if (bootstrapModal) {
+                            bootstrapModal.hide();
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        });
+    }
 }
 </script>
+
+
+
+<style scoped>
+.preview {
+  width: 100%;
+  height: calc(372px * (9 / 16));
+  overflow: hidden;
+}
+</style>
