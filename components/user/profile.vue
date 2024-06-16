@@ -74,7 +74,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal" @click="removeImage">Cancel</button>
-                    <button type="button" class="btn btn-dark rounded-0" @click="cropImage">Change</button>
+                    <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal" @click="cropImage">Change</button>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@ const isEditing = ref(false);
 const profileStore = useProfile();
 const imageProfile = ref('');
 const imageUrlProfile = ref('');
-const cropper = ref<VueCropper | null>(null);
+const cropper = ref('');
 
 onMounted(async () => {
     await profileStore.profileUser();
@@ -132,24 +132,13 @@ async function cropImage() {
         croppedCanvas.toBlob(async (blob) => {
             if (blob) {
                 try {
-                    // Delete the existing profile picture first
                     await profileStore.deleteImgProfile();
 
-                    // Perform the image upload
                     const response = await profileStore.addImgProfile(blob);
-                    console.log(response);
+                    console.log('Profile updated with new image:', response);
 
-                    // Update the profile picture URL in the store
-                    profileStore.img = URL.createObjectURL(blob);
+                    await profileStore.profileUser();
 
-                    // Close the modal
-                    const modal = document.getElementById('cropper');
-                    if (modal) {
-                        const bootstrapModal = bootstrap.Modal.getInstance(modal);
-                        if (bootstrapModal) {
-                            bootstrapModal.hide();
-                        }
-                    }
                 } catch (err) {
                     console.error(err);
                 }

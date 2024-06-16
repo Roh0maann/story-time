@@ -8,6 +8,7 @@ export const useProfile = defineStore("profiles", {
         email: "",
         biodata: "",
         img: "",
+        imgId: "",
         bookmarks: [],
     }),
 
@@ -24,12 +25,12 @@ export const useProfile = defineStore("profiles", {
         async profileUser() {
             try {
                 const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
-                const token = Cookies.get('jwt'); // Ambil token dari cookies
+                const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
                 const profile = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/users/me', {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Sertakan token dalam header
+                        Authorization: `Bearer ${token}`,
                     },
                 });
 
@@ -39,6 +40,7 @@ export const useProfile = defineStore("profiles", {
                 this.img = profile.data.data.profile_picture?.formats?.thumbnail?.url 
                     ? urlBase + profile.data.data.profile_picture.formats.thumbnail.url 
                     : 'https://via.placeholder.com/150';
+                this.imgId = profile.data.data.profile_picture?.id;
 
             } catch (err: any) {
                 console.log(err);
@@ -73,28 +75,28 @@ export const useProfile = defineStore("profiles", {
                 formImgProfile.append('refId', userId);
                 formImgProfile.append('ref', 'plugin::users-permissions.user');
                 formImgProfile.append('field', 'profile_picture');
-
+        
                 const addImg = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/upload', formImgProfile, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
+        
                 // Log the response
-                console.log(addImg.data);
-
-                // Update the profile image URL in the state
-                if (addImg.data.length > 0) {
-                    const uploadedImgUrl = addImg.data[0].url;
-                    this.img = uploadedImgUrl;
+                console.log('Upload response:', addImg.data.data);
+        
+                if (addImg.data.data.length > 0) {
+                    const uploadedImgUrl = addImg.data.data[0].url;
+                    this.img = 'https://storytime-api.strapi.timedoor-js.web.id' + uploadedImgUrl;
+                    console.log('New profile image URL:', this.img);
                 }
-
+        
                 return addImg.data.data;
             } catch (err) {
                 console.log(err);
             }
-        },
+        },        
 
         async deleteImgProfile() {
             try {
@@ -109,8 +111,8 @@ export const useProfile = defineStore("profiles", {
                 });
 
                 // Clear image data in the state
-                this.img = '';
-                this.imgId = null;
+                this.img = "";
+                this.imgId = "";
             } catch (err) {
                 console.log(err);
             }
