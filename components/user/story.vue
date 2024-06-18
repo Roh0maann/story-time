@@ -2,7 +2,7 @@
     <div class="border shadow m-0 p-4 w-100 mb-4">
         <div class="d-flex justify-content-between align-items-center align-content-center">
             <h4 class="m-0 p-0">Story List</h4>
-            <NuxtLink to="/user/story/create" class="py-1 px-2 btn btn-dark rounded-0 fw-semibold btn-create-story"
+            <NuxtLink to="/user/story/create" class="py-1 px-2 btn btn-dark rounded-0 fw-semibold btn-create-story w-auto"
                 style="font-size: 14px;">
                 +
                 Create Story
@@ -18,36 +18,33 @@
         </div>
 
         <div class="mt-4 mb-3" v-else>
-            <table class="table">
-                <thead>
-                    <tr class="table-group-divider fs-6">
-                        <th scope="col" class="w-50">Title</th>
-                        <th scope="col">Last Update</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <tr v-for="(story, index) in storyStore.storyList" :key="story.id" style="font-size: 14px;">
-                        <td>
-                            <NuxtLink :to="'/story/' + story.id" class="text-decoration-none text-black">{{ story.title
-                                }}</NuxtLink>
-                        </td>
-                        <td>{{ formatDateStory(story.updatedAt) }}</td>
-                        <td>
-                            <NuxtLink :to="'/user/story/' + story.id + '/edit'"
-                                class="btn btn-outline-dark rounded-0 py-1 px-3 me-3 btn-edit">
-                                <i class="fa-solid fa-pen"></i> Edit
-                            </NuxtLink>
-                            <UiBase-Button class="btn btn-outline-danger rounded-0 py-1 px-3 btn-delete"
-                                data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deletId(story.id)">
-                                <i class="fa-solid fa-trash-can"></i> Delete
-                            </UiBase-Button>
-                        </td>
-
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <table class="table table-responsive">
+      <thead>
+        <tr class="table-group-divider fs-6">
+          <th scope="col" class="col-2">Title</th>
+          <th scope="col" class="col-1">Last Update</th>
+          <th scope="col" class="col-1">Action</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <tr v-for="(story, index) in storyStore.storyList" :key="story.id" style="font-size: 14px;">
+          <td>
+            <NuxtLink :to="'/story/' + story.id" class="text-decoration-none text-black">{{ story.title }}</NuxtLink>
+          </td>
+          <td>{{ formatDateStory(story.updatedAt) }}</td>
+          <td class="d-flex">
+            <NuxtLink :to="'/user/story/' + story.id + '/edit'" class="btn btn-outline-dark rounded-0 py-1 px-3 me-3 btn-edit w-auto">
+              <i class="fa-solid fa-pen"></i> <span class="d-sm-inline">Edit</span>
+            </NuxtLink>
+            <UiBase-Button class="btn btn-outline-danger rounded-0 py-1 px-3 btn-delete w-auto"
+              data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deletId(story.id)">
+              <i class="fa-solid fa-trash-can"></i> <span class="d-sm-inline">Delete</span>
+            </UiBase-Button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
     </div>
 
 
@@ -103,3 +100,12 @@ const deleteStory = async () => {
     }
 };
 </script>
+
+
+<style scoped>
+@media (max-width: 576px) {
+  .btn-edit span, .btn-delete span {
+    display: none;
+  }
+}
+</style>

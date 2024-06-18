@@ -32,7 +32,7 @@
                     </div>
                     <div v-if="imageUrl" name="outputImage">
                         <div class="w-100 d-flex">
-                            <div class="ms-4" style="width: 30%;">
+                            <div class="ms-4 w-auto">
                                 <img :src="imageSrc" class="w-100 h-100" alt="">
                             </div>
                             <button type="button" @click="removeImage" class="btn rounded-circle fs-4 d-flex justify-content-center align-items-center" style="width: 25px; height: 25px;">

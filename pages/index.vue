@@ -37,7 +37,7 @@
   
   @media (max-width: 767px) {
     .home-content1 {
-      margin-top: 60%;
+      margin-top: 50%;
     }
   
     .home-content2 {

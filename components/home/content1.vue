@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex justify-content-center m-0">
-        <div class="px-2 text-center m-0 container">
+        <div class="px-3 text-center m-0 container w-75">
             <div class="p-0 m-0">
                 <h1 class="text-center">
                     Welcome to <img class="" src="~/assets/images/logo.svg" alt="" />
