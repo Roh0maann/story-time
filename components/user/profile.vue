@@ -1,18 +1,18 @@
 <template>
     <div class="border shadow m-0 p-4 w-100 mb-4">
         <div class="d-flex justify-content-between align-items-center align-content-center">
-            <h4 class="m-0 p-0">My Profile</h4>
-            <UiBase-Button v-if="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0"
-                style="font-size: 16px; width: 17%;" @click="startEditing">
+            <h4 class="m-0 px-1">My Profile</h4>
+            <UiBase-Button v-if="!isEditing" class="w-auto py-1 px-3 btn btn-outline-dark rounded-0"
+                style="font-size: 16px;" @click="startEditing">
                 <i class="fa-regular fa-pen-to-square"></i>
                 Edit Profile
             </UiBase-Button>
         </div>
-        <div class="mt-5 mb-4 d-flex row">
-            <div class="col-4">
+        <div class="mt-5 mb-4 row gap-lg-0 gap-4">
+            <div class="col-lg-4 col-sm-12 d-flex justify-content-center justify-content-lg-start">
                 <div class="" style="width: 200px;">
                     <div class="mb-4">
-                        <img class="w-100 h-100 object-fit-cover rounded-circle" :src="profileStore.img" alt="">
+                        <img class="w-100 h-100 object-fit-cover rounded-circle" :src="profileStore.img ? urlBase + profileStore.img : 'https://via.placeholder.com/150' " alt="">
                     </div>
                     
                     <div class="w-100">
@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-sm-12">
                 <div v-if="!isEditing" class="d-flex" name="dataProfile">
                     <div class="text-black fw-semibold me-5">
                         <p>Name</p>
@@ -93,6 +93,7 @@ const profileStore = useProfile();
 const imageProfile = ref('');
 const imageUrlProfile = ref('');
 const cropper = ref('');
+const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id/';
 
 onMounted(async () => {
     await profileStore.profileUser();
@@ -134,15 +135,14 @@ async function cropImage() {
                 try {
                     await profileStore.deleteImgProfile();
 
-                    const response = await profileStore.addImgProfile(blob);
-                    console.log('Profile updated with new image:', response);
+                    await profileStore.addImgProfile(blob);
 
                     await profileStore.profileUser();
 
                 } catch (err) {
                     console.error(err);
                 }
-            }
+            };
         });
     }
 }

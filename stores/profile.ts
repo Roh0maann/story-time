@@ -24,7 +24,6 @@ export const useProfile = defineStore("profiles", {
     actions: {
         async profileUser() {
             try {
-                const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
@@ -37,9 +36,7 @@ export const useProfile = defineStore("profiles", {
                 this.name = profile.data.data.name;
                 this.email = profile.data.data.email;
                 this.biodata = profile.data.data.biodata;
-                this.img = profile.data.data.profile_picture?.formats?.thumbnail?.url 
-                    ? urlBase + profile.data.data.profile_picture.formats.thumbnail.url 
-                    : 'https://via.placeholder.com/150';
+                this.img = profile.data.data.profile_picture?.formats?.thumbnail?.url;
                 this.imgId = profile.data.data.profile_picture?.id;
 
             } catch (err: any) {
@@ -66,6 +63,7 @@ export const useProfile = defineStore("profiles", {
         /* Untuk Profile Picture */
         async addImgProfile(image: any) {
             try {
+                const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
                 const token = Cookies.get('jwt');
                 const userId = Cookies.get('userID');
                 if (!token) throw new Error('No token found');
@@ -88,7 +86,7 @@ export const useProfile = defineStore("profiles", {
         
                 if (addImg.data.data.length > 0) {
                     const uploadedImgUrl = addImg.data.data[0].url;
-                    this.img = 'https://storytime-api.strapi.timedoor-js.web.id' + uploadedImgUrl;
+                    this.img = uploadedImgUrl;
                     console.log('New profile image URL:', this.img);
                 }
         

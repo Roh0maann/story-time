@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-center m-0" style="padding-top: 20%; padding-bottom: 15%;">
+    <div class="d-flex justify-content-center m-0">
         <div class="px-2 text-center m-0 container">
             <div class="p-0 m-0">
                 <h1 class="text-center">

@@ -2,7 +2,7 @@
     <div class="border shadow m-0 p-4 w-100">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="m-0 p-0">Password</h4>
-            <UiBase-Button v-show="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0 w-25" style="font-size: 16px" @click="startEditing">
+            <UiBase-Button v-show="!isEditing" class="py-1 px-3 btn btn-outline-dark rounded-0 w-auto" style="font-size: 16px" @click="startEditing">
                 <i class="fa-regular fa-pen-to-square"></i>
                 Change Password
             </UiBase-Button>

@@ -1,6 +1,6 @@
 <template>
-    <div class="" style="padding-top: 8%; padding-bottom: 6%">
-        <div class="container">
+    <div class="">
+        <div class="container register">
             <div class="row justify-content-center ">
                 <!-- Form Register -->
                 <div v-if="!registrationSuccess" class="col-lg-5">
@@ -119,3 +119,20 @@ const register = async (values) => {
     }
 };
 </script>
+
+
+<style scoped>
+@media (min-width: 768px) {
+  .register {
+    margin-top: 0%;
+    margin-bottom: 0%
+  }
+}
+
+@media (max-width: 767px) {
+  .register {
+    margin-top: 34%;
+    margin-bottom: 20%;
+  }
+}
+</style>

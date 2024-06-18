@@ -1,16 +1,32 @@
 <template>
-    <div class="container" style="padding-top: 8%; padding-bottom: 8%;">
-        <div class="row">
-            <div class="col-3">
-                <UserMenu/>
-            </div>
-            <div class="col-9">
-                <UserMy/>
-            </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-sm-12 menu">
+          <UserMenu />
         </div>
+        <div class="col-lg-9 col-sm-12">
+          <UserMy />
+        </div>
+      </div>
     </div>
-</template>
+  </template>
+  
+  <script setup lang="ts">
+  </script>
+  
+  <style scoped>
+  @media (min-width: 768px) {
+  .menu {
+    margin-top: 0%;
+    margin-bottom: 0%;
+  }
+}
 
-<script setup lang="ts">
-
-</script>
+@media (max-width: 767px) {
+  .menu {
+    margin-top: 22%;
+    margin-bottom: 12%;
+  }
+}
+  </style>
+  

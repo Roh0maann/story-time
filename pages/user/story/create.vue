@@ -1,5 +1,5 @@
 <template>
-    <div class="container" style="padding-top: 8%; padding-bottom: 8%;">
+    <div class="container">
         <div class="row">
             <div class="col-3">
                 <UserMenu/>

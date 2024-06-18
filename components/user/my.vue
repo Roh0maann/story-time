@@ -1,4 +1,4 @@
 <template>
-    <UserProfile></UserProfile>
-    <UserPassword></UserPassword>
+    <UserProfile/>
+    <UserPassword/>
 </template>

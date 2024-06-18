@@ -1,6 +1,6 @@
 <template>
-    <div class="" style="padding-top: 8%; padding-bottom: 10%">
-        <div class="container">
+    <div class="">
+        <div class="container login">
             <div class="row justify-content-center">
                 <div class="col-lg-5">
                     <Form :validation-schema="schema" @submit="login" class="p-4 shadow">
@@ -80,3 +80,19 @@ onMounted(() => {
     authStore.checkAuth();
 });
 </script>
+
+<style scoped>
+@media (min-width: 768px) {
+  .login {
+    margin-top: 0%;
+    margin-bottom: 0%
+  }
+}
+
+@media (max-width: 767px) {
+  .login {
+    margin-top: 35%;
+    margin-bottom: 20%;
+  }
+}
+</style>
