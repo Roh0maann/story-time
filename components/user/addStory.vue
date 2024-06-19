@@ -151,10 +151,10 @@ function removeImage() {
                             </label>
                         </div>
                     </div>
-                    <div v-if="imageUrl" name="outputImage">
-                        <div class="w-100 d-flex">
+                    <div v-if="imageUrl" name="outputImage" class="row">
+                        <div class="d-flex col-sm-12 col-lg-4">
                             <div class="ms-4 w-auto">
-                                <img :src="imageUrl" class="w-100 h-100" alt="">
+                                <img :src="imageUrl" class="w-auto h-auto" alt="">
                             </div>
                             <button type="button" @click="removeImage" class="btn rounded-circle fs-4 d-flex justify-content-center align-items-center" style="width: 25px; height: 25px;">
                                 <i class="text-danger fa-solid fa-circle-xmark"></i>

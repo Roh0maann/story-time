@@ -7,7 +7,7 @@
                 Change Password
             </UiBase-Button>
         </div>
-        <form v-show="isEditing" @submit.prevent="savePassword" action="" class="">
+        <form v-show="isEditing" @submit.prevent="changePassword" action="" class="">
             <div class="mt-4">
                 <div class="mb-3 position-relative">
                     <UiBase-Input v-model="password" name="oldPassword" :type="passwordFieldType" label="Old Password" placeholder="Enter old password" identity="oldPassword"/>
@@ -15,6 +15,10 @@
                         class="position-absolute top-50 end-0 mt-1 me-2 border-0 bg-white">
                         <i :class="passwordIcon"></i>
                     </span>
+
+                    <h1>{{password}}</h1>
+                    <h1>{{newPassword}}</h1>
+                    <h1>{{newPasswordConfirmation}}</h1>
                 </div>
                 <div class="mb-3 position-relative">
                     <UiBase-Input v-model="newPassword" name="newPassword" :type="passwordFieldType1" label="New Password" placeholder="Enter a new password" identity="newPassword"/>
@@ -40,6 +44,10 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { usePassword } from '~/stores/password';
+
 useHead({
     title: "Story Time"
 })
@@ -54,18 +62,12 @@ function cancelEditing() {
     isEditing.value = false;
 }
 
-function savePassword() {
-    
-    console.log("Password saved");
-    isEditing.value = false;
-}
-
-
+const router = useRouter();
+const passwordStore = usePassword();
 
 const password = ref('');
 const newPassword = ref('');
 const newPasswordConfirmationd = ref('');
-
 
 const isPasswordVisible = ref(false);
 const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));
@@ -93,7 +95,18 @@ function togglePasswordVisibility2() {
     isPasswordVisible2.value = !isPasswordVisible2.value;
 }
 
-const changePassword = computed(() => {
-    
-});
+async function changePassword() {
+    try {
+        const formPassword = {
+            passwordOld: password.value,
+            passwordNew: newPassword.value
+        };
+
+        await passwordStore.resetPassword(formPassword);
+        isEditing.value = false;
+        router.push('/login');
+    } catch (err) {
+        console.log(err);
+    }
+};
 </script>
