@@ -10,6 +10,7 @@ export const useProfile = defineStore("profiles", {
         img: "",
         imgId: "",
         bookmarks: [],
+        profileId: "",
     }),
 
     getters: {
@@ -38,6 +39,7 @@ export const useProfile = defineStore("profiles", {
                 this.biodata = profile.data.data.biodata;
                 this.img = profile.data.data.profile_picture?.formats?.thumbnail?.url;
                 this.imgId = profile.data.data.profile_picture?.id;
+                this.profileId = profile.data.data.id
 
             } catch (err: any) {
                 console.log(err);

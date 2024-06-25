@@ -18,7 +18,8 @@ export default defineNuxtConfig({
           src: 'https://kit.fontawesome.com/3063eb1ed2.js',
         }
       ]
-    }
+    },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
   css: [
     '@/assets/main.css',

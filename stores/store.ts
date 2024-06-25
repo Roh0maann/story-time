@@ -6,17 +6,26 @@ export const useStory = defineStore("store", {
     state: () => ({
         storyList: [],
         storyListDetail: {},
+        pageCount: 1,
     }),
 
     actions: {
-        async fetchStoryList(page: any, keyword = '') {
+        async fetchStoryList(page: any, keyword = '', sort = '') {
             try {
-                const infos = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?keyword=${keyword}&author&page=${page}`);
+                const infos = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories`, {
+                    params: {
+                        keyword,
+                        page,
+                        sort,
+                    },
+                });
                 if (page === 1) {
                     this.storyList = [];
                 }
 
                 const newInfos = infos.data.data;
+                this.pageCount = infos.data.meta.pagination.pageCount
+
                 for (const item of newInfos) {
                     const isExisting = this.storyList.find(existing => existing.id === item.id);
                     if (!isExisting) {
@@ -24,7 +33,7 @@ export const useStory = defineStore("store", {
                     }
                 }
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         },
 

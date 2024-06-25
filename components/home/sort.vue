@@ -1,10 +1,11 @@
 <template>
     <div class="p-0 m-0 w-25">
-        <select v-model="sortOrder" @change="emitSortedData" class="py-2 px-2 w-100 m-0 form-select rounded-0">
+        <select v-model="sortOrder" class="py-2 px-2 w-100 m-0 form-select rounded-0">
             <option value="" disabled selected>Sort</option>
-            <option value="Newest">Newest</option>
-            <option value="A-Z">A-Z</option>
-            <option value="Z-A">Z-A</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="a-z">A-Z</option>
+            <option value="z-a">Z-A</option>
         </select>
     </div>
 </template>

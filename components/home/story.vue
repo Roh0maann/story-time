@@ -5,10 +5,16 @@
                 <NuxtLink :to="'/story/' + item.id" class="text-decoration-none" style="height: 160px;">
                     <img v-if="item.cover_image" :src="urlBase + item.cover_image.url" class="card-img-top h-100 w-100"
                         alt="Img" style="object-fit: cover;" />
+                        
+                    <img v-else src="https://via.placeholder.com/150" class="card-img-top h-100 w-100" alt="Placeholder"
+                        style="object-fit: cover;" />
                 </NuxtLink>
                 <div class="card-body px-2 py-4">
-                    <button class="position-absolute rounded-circle btn btn-light p-0 top-0 end-0 mx-2 my-2 bookmark-icon" @click="toggleBookmark(item)">
-                        <i :class="['fa-bookmark rounded-circle p-3 m-0 p-0', isBookmarked(item.id) ? 'fa-solid' : 'fa-regular']"></i>
+                    <button
+                        class="position-absolute rounded-circle btn btn-light p-0 top-0 end-0 mx-2 my-2 bookmark-icon"
+                        @click="toggleBookmark(item)">
+                        <i
+                            :class="['fa-bookmark rounded-circle p-3 m-0 p-0', isBookmarked(item.id) ? 'fa-solid' : 'fa-regular']"></i>
                     </button>
                     <NuxtLink :to="'/story/' + item.id" class="text-decoration-none">
                         <h2 class="text-black" style="font-size: 18px;">{{ item.title }}</h2>

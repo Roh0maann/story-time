@@ -15,10 +15,6 @@
                         class="position-absolute top-50 end-0 mt-1 me-2 border-0 bg-white">
                         <i :class="passwordIcon"></i>
                     </span>
-
-                    <h1>{{password}}</h1>
-                    <h1>{{newPassword}}</h1>
-                    <h1>{{newPasswordConfirmation}}</h1>
                 </div>
                 <div class="mb-3 position-relative">
                     <UiBase-Input v-model="newPassword" name="newPassword" :type="passwordFieldType1" label="New Password" placeholder="Enter a new password" identity="newPassword"/>
@@ -98,13 +94,14 @@ function togglePasswordVisibility2() {
 async function changePassword() {
     try {
         const formPassword = {
-            passwordOld: password.value,
-            passwordNew: newPassword.value
+            data : {
+                currentPassword: password.value,
+                newPassword: newPassword.value,
+            }
         };
 
         await passwordStore.resetPassword(formPassword);
         isEditing.value = false;
-        router.push('/login');
     } catch (err) {
         console.log(err);
     }

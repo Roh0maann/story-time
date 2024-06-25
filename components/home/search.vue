@@ -18,4 +18,4 @@ const emit = defineEmits(['searchData']);
 function dataSearch() {
     emit('searchData', searchValue.value);
 }
-</script>/
+</script>

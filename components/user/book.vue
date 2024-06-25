@@ -16,10 +16,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useProfile } from '~/stores/profile';
 
 const profileStore = useProfile();
 
 const bookmarks = computed(() => profileStore.getBookmarks);
+
+
 </script>

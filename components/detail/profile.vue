@@ -9,7 +9,7 @@
                     : 'https://via.placeholder.com/150'" 
                 alt="">
             </div>
-            <h3 v-if="data.author" class="mb-3 p-0 " style="font-size: 16px;">{{ data.author?.username }}</h3>
+            <h3 v-if="data.author" class="mb-3 p-0 " style="font-size: 16px;">{{ data.author?.name }}</h3>
             <h5 v-if="data.author" class="text-secondary fw-normal m-0 p-0" style="font-size: 14px;">{{
                 data.author?.biodata }}</h5>
         </div>
