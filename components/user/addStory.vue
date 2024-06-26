@@ -19,13 +19,15 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
-                    <UiQuill v-model:content="content" name="content"></UiQuill>
+                    <Field name="content" v-slot="field">
+                        <UiQuill v-bind="field" v-model:content="content"></UiQuill>
+                    </Field>
                 </div>
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Cover Image</label>
                     <div v-if="!imageUrl" name="inputImage">
                         <div class="w-100">
-                            <UiBase-Input class="d-none" v-model="image" name="img" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
+                            <UiBase-Input-Img class="d-none" v-model="image" name="img" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
                             <label for="inputImage" class="d-flex justify-content-center align-content-center align-items-center border-2 border-secondary flex-column m-0" style="border-style: dashed; width: 300px; height: 300px; cursor: pointer;">
                                 <i class="fa-solid fa-circle-plus fs-5"></i>
                                 <p class="m-0 p-0">Add image</p>
@@ -138,13 +140,15 @@ function removeImage() {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
-                    <UiQuill v-model:content="content"></UiQuill>
+                    <Field name="content" v-slot="field">
+                        <UiQuill v-bind="field" v-model:content="content"></UiQuill>
+                    </Field>
                 </div>
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Cover Image</label>
                     <div v-if="!imageUrl" name="inputImage">
                         <div class="w-100">
-                            <UiBase-Input class="d-none" v-model="image" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
+                            <UiBase-Input-Img class="d-none" v-model="image" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
                             <label for="inputImage" class="d-flex justify-content-center align-content-center align-items-center border-2 border-secondary flex-column m-0" style="border-style: dashed; width: 300px; height: 300px; cursor: pointer;">
                                 <i class="fa-solid fa-circle-plus fs-5"></i>
                                 <p class="m-0 p-0">Add image</p>
@@ -152,9 +156,10 @@ function removeImage() {
                         </div>
                     </div>
                     <div v-if="imageUrl" name="outputImage" class="row">
-                        <div class="d-flex col-sm-12 col-lg-4">
-                            <div class="ms-4 w-auto">
-                                <img :src="imageUrl" class="w-auto h-auto" alt="">
+                        <div class="d-flex col-sm-12 col-lg-6">
+                            <div class="ms-4">
+                                <img :src="imageUrl" class="w-100 h-100" alt="">
+                                
                             </div>
                             <button type="button" @click="removeImage" class="btn rounded-circle fs-4 d-flex justify-content-center align-items-center" style="width: 25px; height: 25px;">
                                 <i class="text-danger fa-solid fa-circle-xmark"></i>

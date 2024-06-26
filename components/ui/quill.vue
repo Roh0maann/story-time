@@ -1,5 +1,5 @@
 <template>
-    <QuillEditor  :options="editorOptions" contentType="html"/>
+    <QuillEditor :options="editorOptions" contentType="html"/>
 </template>
 
 <script setup>

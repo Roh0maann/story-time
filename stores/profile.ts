@@ -67,12 +67,11 @@ export const useProfile = defineStore("profiles", {
             try {
                 const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
                 const token = Cookies.get('jwt');
-                const userId = Cookies.get('userID');
                 if (!token) throw new Error('No token found');
                 
                 const formImgProfile = new FormData();
                 formImgProfile.append('files', image);
-                formImgProfile.append('refId', userId);
+                formImgProfile.append('refId', this.profileId);
                 formImgProfile.append('ref', 'plugin::users-permissions.user');
                 formImgProfile.append('field', 'profile_picture');
         
@@ -132,13 +131,13 @@ export const useProfile = defineStore("profiles", {
         saveBookmarks() {
             const token = Cookies.get('jwt');
             if (token) {
-                const userId = Cookies.get('userID');
+                const userId = this.profileId;
                 localStorage.setItem(`bookmarks_${userId}`, JSON.stringify(this.bookmarks));
             }
         },
     
         loadBookmarks() {
-            const userId = Cookies.get('userID');
+            const userId = this.profileId;
             const savedBookmarks = localStorage.getItem(`bookmarks_${userId}`);
             if (savedBookmarks) {
                 this.bookmarks = JSON.parse(savedBookmarks);
@@ -146,7 +145,7 @@ export const useProfile = defineStore("profiles", {
         },
     
         clearBookmarks() {
-            const userId = Cookies.get('userID');
+            const userId = this.profileId;
             localStorage.removeItem(`bookmarks_${userId}`);
             this.bookmarks = [];
         },

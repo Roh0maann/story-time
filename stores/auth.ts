@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
-import { use } from 'chai';
 import { useProfile } from '~/stores/profile';
 
 export const useAuth = defineStore("auth", {
@@ -12,7 +11,6 @@ export const useAuth = defineStore("auth", {
         password: "",
         passwordConfirmation: "",
         token: "",
-        userId: "",
 
         userLogin: false,
         userRegister: false,
@@ -44,12 +42,11 @@ export const useAuth = defineStore("auth", {
                 });
         
                 this.token = data.data.jwt;
-                this.userId = data.data.user.id;
                 this.userLogin = true;
                 
                 // Simpan token di cookies
                 Cookies.set("jwt", this.token, { expires: 1 });
-                Cookies.set("userID", this.userId, { expires: 1 });
+
                 return true;
             } catch (err: any) {
                 console.log(err);
@@ -68,11 +65,8 @@ export const useAuth = defineStore("auth", {
 
         async logout() {
             this.token = "";
-            this.userId = "";
             this.userLogin = false;
             Cookies.remove('jwt');
-            Cookies.remove('userID');
-
 
             const profileStore = useProfile();
             profileStore.clearBookmarks();

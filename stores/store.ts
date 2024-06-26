@@ -12,7 +12,10 @@ export const useStory = defineStore("store", {
     actions: {
         async fetchStoryList(page: any, keyword = '', sort = '') {
             try {
-                const infos = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories`, {
+                const config = useRuntimeConfig();
+                console.log('API URL:', config.public.apiUrl);;
+
+                const infos = await axios.get(`${config.public.apiUrl}/stories`, {
                     params: {
                         keyword,
                         page,
@@ -80,15 +83,18 @@ export const useStory = defineStore("store", {
                 formImg.append('ref', 'api::story.story');
                 formImg.append('field', 'cover_image');
 
-                const addImg = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/upload', formImg, {
+                const addImg = await $fetch('https://storytime-api.strapi.timedoor-js.web.id/api/upload', {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
                     },
-                })
+                    body: formImg
+                });
 
-                return addImg.data.data;
+                return addImg;
+                
             } catch (err) {
+                console.error('Error during upload:', err);
                 console.log(err)
             }
         },
@@ -96,7 +102,8 @@ export const useStory = defineStore("store", {
         async getUserStory() {
             try {
                 const token = Cookies.get('jwt');
-                const userId = Cookies.get('userID');
+                const profileStore = useProfile();
+                const userId = profileStore.profileId;
 
                 if (!token) throw new Error('No token found');
 

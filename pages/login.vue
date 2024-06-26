@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-    </div>z
+    </div>
 </template>
 
 <script setup lang="ts">
