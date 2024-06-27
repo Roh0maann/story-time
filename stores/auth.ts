@@ -19,7 +19,8 @@ export const useAuth = defineStore("auth", {
     actions: {
         async registerUser() {
             try {
-                const register = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local/register', {
+                const config = useRuntimeConfig();
+                const register = await axios.post(`${config.public.apiUrl}/auth/local/register`, {
                     name: this.name,
                     username: this.username,
                     email: this.email,
@@ -36,7 +37,8 @@ export const useAuth = defineStore("auth", {
 
         async loginUser() {
             try {
-                const {data} = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/auth/local', {
+                const config = useRuntimeConfig();
+                const {data} = await axios.post(`${config.public.apiUrl}/auth/local`, {
                     identifier: this.username || this.email,
                     password: this.password
                 });
@@ -55,11 +57,13 @@ export const useAuth = defineStore("auth", {
         },
         
 
-        checkAuth() {
+        async checkAuth() {
             const token = Cookies.get('jwt');
             if (token) {
                 this.token = token; 
                 this.userLogin = true;
+            } else {
+                this.userLogin = false;
             }
         },
 

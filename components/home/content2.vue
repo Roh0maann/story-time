@@ -1,7 +1,7 @@
 <template>
     <div class="" style="padding-top: 10%;">
         <div class="container">
-            <div class="d-flex justify-content-between m-0 p-0">
+            <div class="d-flex flex-md-row flex-column justify-content-between m-0 p-0 w-100 gap-3">
                 <HomeSearch @searchData="updateSearch"></HomeSearch>
                 <HomeSort @sortedData="updateSort"></HomeSort>
             </div>

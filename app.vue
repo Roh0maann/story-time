@@ -9,10 +9,13 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useProfile } from '~/stores/profile';
+import { useAuth } from '~/stores/auth';
 
+const auth = useAuth();
 const profileStore = useProfile();
 
-onMounted(() => {
+onMounted(async () => {
+    await auth.checkAuth();
     profileStore.loadBookmarks();
 });
 </script>

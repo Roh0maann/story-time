@@ -13,7 +13,6 @@ export const useStory = defineStore("store", {
         async fetchStoryList(page: any, keyword = '', sort = '') {
             try {
                 const config = useRuntimeConfig();
-                console.log('API URL:', config.public.apiUrl);;
 
                 const infos = await axios.get(`${config.public.apiUrl}/stories`, {
                     params: {
@@ -42,7 +41,9 @@ export const useStory = defineStore("store", {
 
         async getStoryDetail(id: any) {
             try {
-                const { data } = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`);
+                const config = useRuntimeConfig();
+
+                const { data } = await axios.get(`${config.public.apiUrl}/stories/${id}`);
                 this.storyListDetail = data.data;
             } catch (err) {
                 console.log(err)
@@ -51,6 +52,7 @@ export const useStory = defineStore("store", {
 
         async addStory(title: any, content: any, category: any) {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
@@ -59,7 +61,7 @@ export const useStory = defineStore("store", {
                 formData.append('content', content);
                 formData.append('category', category);
 
-                const add = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/stories', formData, {
+                const add = await axios.post(`${config.public.apiUrl}/stories`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
@@ -74,6 +76,7 @@ export const useStory = defineStore("store", {
 
         async addImg(image: any, id: any) {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
@@ -83,7 +86,7 @@ export const useStory = defineStore("store", {
                 formImg.append('ref', 'api::story.story');
                 formImg.append('field', 'cover_image');
 
-                const addImg = await $fetch('https://storytime-api.strapi.timedoor-js.web.id/api/upload', {
+                const addImg = await $fetch(`${config.public.apiUrl}/upload`, {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -101,13 +104,14 @@ export const useStory = defineStore("store", {
 
         async getUserStory() {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
                 const profileStore = useProfile();
                 const userId = profileStore.profileId;
 
                 if (!token) throw new Error('No token found');
 
-                const userStory = await axios.get(`https://storytime-api.strapi.timedoor-js.web.id/api/stories?author=${userId}`, {
+                const userStory = await axios.get(`${config.public.apiUrl}/stories?author=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -120,10 +124,11 @@ export const useStory = defineStore("store", {
 
         async deleteStory(id: any) {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
-                const deleteStory = await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, {
+                const deleteStory = await axios.delete(`${config.public.apiUrl}/stories/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -136,10 +141,11 @@ export const useStory = defineStore("store", {
 
         async updateStory(id: any, updatedData: any) {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
-                const update = await axios.put(`https://storytime-api.strapi.timedoor-js.web.id/api/stories/${id}`, updatedData, {
+                const update = await axios.put(`${config.public.apiUrl}/stories/${id}`, updatedData, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
@@ -154,12 +160,13 @@ export const useStory = defineStore("store", {
 
         async deleteImg(id: any) {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
                 const imageId = this.storyListDetail.cover_image.id;
 
-                const deleteImg = await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/upload/files/${imageId}`, {
+                const deleteImg = await axios.delete(`${config.public.apiUrl}/upload/files/${imageId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

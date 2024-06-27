@@ -8,7 +8,8 @@ export const useCategory = defineStore("category", {
     actions: {
         async fetchCategories() {
             try {
-                const response = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/categories');
+                const config = useRuntimeConfig();
+                const response = await axios.get(`${config.public.apiUrl}/categories`);
                 const categories = response.data.data;
 
                 this.categoryList = categories;

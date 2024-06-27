@@ -25,10 +25,12 @@ export const useProfile = defineStore("profiles", {
     actions: {
         async profileUser() {
             try {
+                const config = useRuntimeConfig();
+
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
 
-                const profile = await axios.get('https://storytime-api.strapi.timedoor-js.web.id/api/users/me', {
+                const profile = await axios.get(`${config.public.apiUrl}/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -48,10 +50,12 @@ export const useProfile = defineStore("profiles", {
 
         async editUser(profileData: any) {
             try {
+                const config = useRuntimeConfig();
+
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
     
-                await axios.patch('https://storytime-api.strapi.timedoor-js.web.id/api/users/me', profileData, {
+                await axios.patch(`${config.public.apiUrl}/users/me`, profileData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -65,6 +69,8 @@ export const useProfile = defineStore("profiles", {
         /* Untuk Profile Picture */
         async addImgProfile(image: any) {
             try {
+                const config = useRuntimeConfig();
+
                 const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
@@ -75,7 +81,7 @@ export const useProfile = defineStore("profiles", {
                 formImgProfile.append('ref', 'plugin::users-permissions.user');
                 formImgProfile.append('field', 'profile_picture');
         
-                const addImg = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/upload', formImgProfile, {
+                const addImg = await axios.post(`${config.public.apiUrl}/upload`, formImgProfile, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
@@ -99,11 +105,13 @@ export const useProfile = defineStore("profiles", {
 
         async deleteImgProfile() {
             try {
+                const config = useRuntimeConfig();
+
                 const token = Cookies.get('jwt');
                 if (!token) throw new Error('No token found');
                 if (!this.imgId) throw new Error('No image to delete');
 
-                await axios.delete(`https://storytime-api.strapi.timedoor-js.web.id/api/upload/files/${this.imgId}`, {
+                await axios.delete(`${config.public.apiUrl}/upload/files/${this.imgId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

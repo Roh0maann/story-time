@@ -1,5 +1,5 @@
 <template>
-    <div class="p-0 m-0 w-25">
+    <div class="p-0 m-0 col-md-3 col-12">
         <select v-model="sortOrder" class="py-2 px-2 w-100 m-0 form-select rounded-0">
             <option value="" disabled selected>Sort</option>
             <option value="newest">Newest</option>

@@ -18,7 +18,7 @@
         </div>
 
         <div class="mt-4 mb-3" v-else>
-    <table class="table table-responsive">
+    <table class="table table-responsive table-hover table-striped">
       <thead>
         <tr class="table-group-divider fs-6">
           <th scope="col" class="col-2">Title</th>

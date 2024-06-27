@@ -9,9 +9,10 @@ export const usePassword = defineStore("password", {
     actions: {
         async resetPassword(formPassword: any) {
             try {
+                const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
 
-                const reset = await axios.post('https://storytime-api.strapi.timedoor-js.web.id/api/users/me/reset-password', formPassword, {
+                const reset = await axios.post(`${config.public.apiUrl}/users/me/reset-password`, formPassword, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
