@@ -43,6 +43,9 @@ export const useProfile = defineStore("profiles", {
                 this.imgId = profile.data.data.profile_picture?.id;
                 this.profileId = profile.data.data.id
 
+                this.loadBookmarks();
+
+
             } catch (err: any) {
                 console.log(err);
             }
@@ -126,22 +129,19 @@ export const useProfile = defineStore("profiles", {
         },
 
         /* Untuk bookmark */
-        toggleBookmark(story: any) {
+        toggleBookmark(story) {
             const index = this.bookmarks.findIndex(item => item.id === story.id);
             if (index === -1) {
                 this.bookmarks.push(story);
             } else {
                 this.bookmarks.splice(index, 1);
             }
-            this.saveBookmarks();
+            this.saveBookmarksLocally();
         },
     
-        saveBookmarks() {
-            const token = Cookies.get('jwt');
-            if (token) {
-                const userId = this.profileId;
-                localStorage.setItem(`bookmarks_${userId}`, JSON.stringify(this.bookmarks));
-            }
+        saveBookmarksLocally() {
+            const userId = this.profileId;
+            localStorage.setItem(`bookmarks_${userId}`, JSON.stringify(this.bookmarks));
         },
     
         loadBookmarks() {
@@ -152,7 +152,7 @@ export const useProfile = defineStore("profiles", {
             }
         },
     
-        clearBookmarks() {
+        clearBookmarksLocally() {
             const userId = this.profileId;
             localStorage.removeItem(`bookmarks_${userId}`);
             this.bookmarks = [];

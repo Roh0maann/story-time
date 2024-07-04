@@ -7,7 +7,7 @@
             <h4 class="m-0 p-0">Create Story</h4>
         </div>
 
-        <Form :validation-schema="schema" @submit="saveStory" class="">
+        <Form v-slot="{values}" :validation-schema="schema" @submit="saveStory" class="">
             <div class="mt-4">
                 <div class="mb-3">
                     <UiBase-Input v-model="title" name="title" type="text" label="Title" placeholder="Enter a story title" identity="title" />
@@ -19,9 +19,12 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
-                    <Field name="content" v-slot="field">
-                        <UiQuill v-bind="field" v-model:content="content"></UiQuill>
-                    </Field>
+                    <Field class="d-none" name="content" v-model="contentQuill"></Field>
+                    <UiQuill v-model:content="contentQuill"></UiQuill>
+                    <pre>
+                        {{ values }}
+                    </pre>
+                    <ErrorMessage name="content" class="text-danger" />
                 </div>
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Cover Image</label>
@@ -76,7 +79,7 @@ const categoryStore = useCategory();
 const storyStore = useStory();
 
 const title = ref('');
-const content = ref('');
+const contentQuill = ref('');
 const category = ref('');
 const image = ref('');
 const imageUrl = ref('');
@@ -91,11 +94,12 @@ onMounted(async () => {
 
 function batalAdd() {
     router.push('/user/story');
+    console.log("content value :", contentQuill.value);
 }
 
 async function saveStory() {
     try {
-        const id = await storyStore.addStory(title.value, content.value, category.value);
+        const id = await storyStore.addStory(title.value, contentQuill.value, category.value);
         await storyStore.addImg(image.value, id);
         router.push('/user/story');
     } catch (err) {
@@ -113,9 +117,6 @@ function removeImage() {
     imageUrl.value = '';
 }
 </script> -->
-
-
-
 
 
 
@@ -140,7 +141,7 @@ function removeImage() {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
-                    <Field name="content" v-slot="field">
+                    <Field name="content" v-slot="{field}">
                         <UiQuill v-bind="field" v-model:content="content"></UiQuill>
                     </Field>
                 </div>
@@ -159,7 +160,6 @@ function removeImage() {
                         <div class="d-flex col-sm-12 col-lg-6">
                             <div class="ms-4">
                                 <img :src="imageUrl" class="w-100 h-100" alt="">
-                                
                             </div>
                             <button type="button" @click="removeImage" class="btn rounded-circle fs-4 d-flex justify-content-center align-items-center" style="width: 25px; height: 25px;">
                                 <i class="text-danger fa-solid fa-circle-xmark"></i>

@@ -102,7 +102,7 @@ export const useStory = defineStore("store", {
             }
         },
 
-        async getUserStory() {
+        async getUserStory(page: any) {
             try {
                 const config = useRuntimeConfig();
                 const token = Cookies.get('jwt');
@@ -112,11 +112,15 @@ export const useStory = defineStore("store", {
                 if (!token) throw new Error('No token found');
 
                 const userStory = await axios.get(`${config.public.apiUrl}/stories?author=${userId}`, {
+                    params: {
+                        page,
+                    },
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 this.storyList = userStory.data.data;
+                this.pageCount = userStory.data.meta.pagination.pageCount
             } catch (err) {
                 console.log(err)
             }

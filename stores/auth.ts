@@ -63,6 +63,7 @@ export const useAuth = defineStore("auth", {
                 this.token = token; 
                 this.userLogin = true;
             } else {
+                this.token = ""; 
                 this.userLogin = false;
             }
         },
@@ -73,7 +74,7 @@ export const useAuth = defineStore("auth", {
             Cookies.remove('jwt');
 
             const profileStore = useProfile();
-            profileStore.clearBookmarks();
+            profileStore.clearBookmarksLocally();
         }
     },
 });
