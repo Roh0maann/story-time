@@ -3,10 +3,10 @@
         <div class="col-6 col-lg-3 my-3" v-for="(item, index) in displayedData" :key="index">
             <div class="card position-relative h-100 hover-card">
                 <NuxtLink :to="'/story/' + item.id" class="text-decoration-none" style="height: 160px;">
-                    <img v-if="item.cover_image" :src="urlBase + item.cover_image.url" class="card-img-top h-100 w-100"
+                    <NuxtImg v-if="item.cover_image" :src="urlBase + item.cover_image.url" class="card-img-top h-100 w-100"
                         alt="Img" style="object-fit: cover;" />
                         
-                    <img v-else src="https://via.placeholder.com/150" class="card-img-top h-100 w-100" alt="Placeholder"
+                    <NuxtImg v-else src="https://via.placeholder.com/150" class="card-img-top h-100 w-100" alt="Placeholder"
                         style="object-fit: cover;" />
                 </NuxtLink>
                 <div class="card-body px-2 py-4">
@@ -37,6 +37,11 @@ import { defineProps } from 'vue';
 import { formatDate } from '~/helpers/dateFormat';
 import { useProfile } from '~/stores/profile';
 import { computed } from 'vue';
+import { useAuth } from "~/stores/auth";
+import { useRouter } from "vue-router";
+
+const authStore = useAuth();
+const router = useRouter();
 
 const props = defineProps({
     displayedData: Array
@@ -51,6 +56,10 @@ const isBookmarked = (id) => {
 }
 
 const toggleBookmark = (item) => {
-    profileStore.toggleBookmark(item);
+    if (!authStore.userLogin) {
+        router.push("/login");
+    } else {
+        profileStore.toggleBookmark(item);
+    }
 }
 </script>

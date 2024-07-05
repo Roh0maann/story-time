@@ -56,9 +56,10 @@ export const useAuth = defineStore("auth", {
             }
         },
         
-
         async checkAuth() {
-            const token = Cookies.get('jwt');
+            const jwtCookie = useCookie('jwt');
+            const token = jwtCookie.value;
+            
             if (token) {
                 this.token = token; 
                 this.userLogin = true;
@@ -71,7 +72,9 @@ export const useAuth = defineStore("auth", {
         async logout() {
             this.token = "";
             this.userLogin = false;
-            Cookies.remove('jwt');
+
+            const jwtCookie = useCookie('jwt');
+            jwtCookie.value = null;
 
             const profileStore = useProfile();
             profileStore.clearBookmarksLocally();

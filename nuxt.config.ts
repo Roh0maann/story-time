@@ -30,6 +30,7 @@ export default defineNuxtConfig({
     '@/assets/main.css',
   ],
   modules: [
+    '@nuxt/image',
     '@pinia/nuxt',
     '@vee-validate/nuxt',
   ],
