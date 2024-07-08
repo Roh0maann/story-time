@@ -3,12 +3,12 @@
         {{ label }}
         <slot></slot>
     </label>
-    <Field :name="name" as="select" class="form-select rounded-0" :id="identity" @input="handleInput" v-model="internalValue">
+    <select :name="name" class="form-select rounded-0" :id="identity" @input="handleInput" v-model="internalValue">
         <option disabled value="">Select Category</option>
         <option v-for="(item, index) in data" :key="index" :value="item.id">
             {{ item.name }}
         </option>
-    </Field>
+    </select>
 </template>
 
 <script setup>

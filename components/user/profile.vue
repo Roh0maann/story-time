@@ -41,19 +41,19 @@
                     </div>
                 </div>
                 <div v-if="isEditing">
-                    <Form :validation-schema="schema" @submit="saveProfile">
+                    <form @submit="saveProfile">
                         <div class="mb-3">
                             <UiBase-Input name="name" type="text" label="Name" placeholder="Enter your name"
-                                identity="name" v-model="profileStore.name" />
-                            <ErrorMessage name="name" class="text-danger" />
+                                identity="name" v-model="name" />
+                            <p class="text-danger">{{ nameError }}</p>
                         </div>
                         <div class="mb-3">
                             <UiBase-Input name="email" type="email" label="Email" placeholder="Enter email"
                                 identity="email" v-model="profileStore.email" :disabled="true" />
                         </div>
                         <div class="mb-3">
-                            <UiBase-Text-Area name="aboutMe" label="About me" placeholder="Enter about me"
-                                identity="aboutMe" v-model="profileStore.biodata" />
+                            <UiBase-Text-Area name="biodata" label="About me" placeholder="Enter about me"
+                                identity="biodata" v-model="profileStore.biodata" />
                         </div>
                         <div class="d-flex justify-content-end">
                             <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3"
@@ -61,7 +61,7 @@
                             <UiBase-Button type="submit"
                                 class="btn btn-dark rounded-0 py-1 px-3 fs-6">Save</UiBase-Button>
                         </div>
-                    </Form>
+                    </form>
                 </div>
             </div>
         </div>
@@ -96,8 +96,8 @@ import { ref, onMounted } from 'vue';
 import { useProfile } from '~/stores/profile';
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
-import { Form, Field, ErrorMessage } from "vee-validate";
-import * as yup from "yup";
+import { useField, useForm } from 'vee-validate';
+import * as yup from 'yup';
 
 const isEditing = ref(false);
 const profileStore = useProfile();
@@ -109,6 +109,14 @@ const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id/';
 const schema = yup.object({
     name: yup.string().required("Name is required"),
 });
+
+const { handleSubmit, resetForm, setValues } = useForm({
+  validationSchema: schema,
+});
+
+const { value: name, errorMessage: nameError } = useField('name');
+
+setValues({name: profileStore.name, })
 
 onMounted(async () => {
     await profileStore.profileUser();
@@ -122,15 +130,22 @@ function cancelEditing() {
     isEditing.value = false;
 }
 
-async function saveProfile() {
-    await profileStore.editUser({
-        name: profileStore.name,
-        email: profileStore.email,
-        biodata: profileStore.biodata
-    });
+const saveProfile = handleSubmit( async () => {
+    try {
+        await profileStore.editUser({
+            name: name.value,
+            email: profileStore.email,
+            biodata: profileStore.biodata,
+        });
 
-    isEditing.value = false;
-}
+        profileStore.name = name.value;
+        profileStore.biodata = biodata.value;
+
+        isEditing.value = false;
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 function onImageChange(file: File) {
     imageProfile.value = file;

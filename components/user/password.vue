@@ -16,6 +16,7 @@
                         <i :class="passwordIcon"></i>
                     </span>
                 </div>
+                <p class="text-danger">{{ passwordError }}</p>
                 <div class="mb-3 position-relative">
                     <UiBase-Input v-model="newPassword" name="newPassword" :type="passwordFieldType1" label="New Password" placeholder="Enter a new password" identity="newPassword"/>
                     <span @click="togglePasswordVisibility1"
@@ -23,6 +24,7 @@
                         <i :class="passwordIcon1"></i>
                     </span>
                 </div>
+                <p class="text-danger">{{ newPasswordError }}</p>
                 <div class="mb-3 position-relative">
                     <UiBase-Input v-model="newPasswordConfirmation" name="newPasswordConfirmation" :type="passwordFieldType2" label="New Password Confirmation" placeholder="Enter new password confirmation" identity="newPasswordConfirmation"/>
                     <span @click="togglePasswordVisibility2"
@@ -30,6 +32,7 @@
                         <i :class="passwordIcon2"></i>
                     </span>
                 </div>
+                <p class="text-danger">{{ newPasswordConfirmationError }}</p>
                 <div class="d-flex justify-content-end">
                     <UiBase-Button type="button" class="btn btn-outline-dark rounded-0 py-1 px-3 fs-6 me-3" @click="cancelEditing">Cencel</UiBase-Button>
                     <UiBase-Button type="submit" class="btn btn-dark rounded-0 py-1 px-3 fs-6">Save</UiBase-Button>
@@ -43,10 +46,26 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePassword } from '~/stores/password';
+import { useField, useForm } from 'vee-validate';
+import * as yup from 'yup';
 
 useHead({
     title: "Story Time"
 })
+
+const schema = yup.object({
+    oldPassword: yup.string().required("Password is required").min(8, 'Password must be at least 8 characters'),
+    newPassword: yup.string().required("Password is required").min(8, 'Password must be at least 8 characters'),
+    newPasswordConfirmation: yup.string().oneOf([yup.ref('newPassword')], 'Passwords must match').required('Password confirmation is required')
+})
+
+const { handleSubmit, resetForm } = useForm({
+  validationSchema: schema,
+});
+
+const { value: password, errorMessage: passwordError } = useField('oldPassword');
+const { value: newPassword, errorMessage: newPasswordError } = useField('newPassword');
+const { value: newPasswordConfirmation, errorMessage: newPasswordConfirmationError } = useField('newPasswordConfirmation');
 
 const isEditing = ref(false);
 
@@ -60,10 +79,6 @@ function cancelEditing() {
 
 const router = useRouter();
 const passwordStore = usePassword();
-
-const password = ref('');
-const newPassword = ref('');
-const newPasswordConfirmationd = ref('');
 
 const isPasswordVisible = ref(false);
 const passwordFieldType = computed(() => (isPasswordVisible.value ? 'text' : 'password'));

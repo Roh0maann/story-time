@@ -4,7 +4,6 @@
             {{ label }}
             <slot></slot>
         </label>
-        <Field :name="name" v-slot="{field}">
             <input :class="['form-control', 'rounded-0']"
             v-bind="field"
             :type="type"
@@ -18,13 +17,10 @@
             @keyup="handleKeyUp"
             @focus="handleFocus"
             />
-        </Field>
     </div>
 </template>
 
 <script setup>
-import { Field } from 'vee-validate';
-
 const props = defineProps({
     type: { type: String, required: true },
     label: { type: String, required: true },

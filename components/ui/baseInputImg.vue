@@ -4,7 +4,7 @@
             {{ label }}
             <slot></slot>
         </label>
-        <Field :class="['form-control', 'rounded-0']"
+        <input :class="['form-control', 'rounded-0']"
             type="file"
             :id="identity"
             :placeholder="placeholder"
@@ -18,8 +18,6 @@
 </template>
 
 <script setup>
-import { Field } from 'vee-validate';
-
 const props = defineProps({
     label: { type: String, required: true },
     identity: { type: String, required: true },

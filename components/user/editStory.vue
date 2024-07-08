@@ -11,26 +11,28 @@
             <div class="mt-4">
                 <div class="mb-3">
                     <UiBase-Input v-model="title" name="title" type="text" label="Title" placeholder="Enter a story title" identity="title" />
+                    <p class="text-danger">{{ titleError }}</p>
                 </div>
                 <div class="mb-3">
-                    <UiBase-Select v-model="category" :data="listCategory" label="Category" identity="category" />
+                    <UiBase-Select v-model="category" name="category" :data="listCategory" label="Category" identity="category" />
+                    <p class="text-danger">{{ categoryError }}</p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
-                    <Field name="content" v-slot="field">
-                        <UiQuill v-bind="field" v-model:content="content"></UiQuill>
-                    </Field>
+                    <UiQuill name="content" v-bind="field" v-model:content="content"></UiQuill>
+                    <p class="text-danger">{{ contentError }}</p>
                 </div>
                 <div class="mb-3 position-relative">
                     <label for="exampleInputPassword1" class="form-label">Cover Image</label>
                     <div v-if="!imageUrl" name="inputImage">
                         <div class="w-100">
-                            <UiBase-Input-Img class="d-none" v-model="image" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
+                            <UiBase-Input-Img class="d-none" v-model="image" name="image" type="file" label="" identity="inputImage" isImage @update:modelValue="onImageChange" />
                             <label for="inputImage" class="d-flex justify-content-center align-content-center align-items-center border-2 border-secondary flex-column m-0" style="border-style: dashed; width: 300px; height: 300px; cursor: pointer;">
                                 <i class="fa-solid fa-circle-plus fs-5"></i>
                                 <p class="m-0 p-0">Add image</p>
                             </label>
                         </div>
+                        <p class="text-danger">{{ imageError }}</p>
                     </div>
 
                     <div v-if="imageUrl" name="outputImage" class="row">
@@ -58,6 +60,24 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStory } from '~/stores/store';
 import { useCategory } from '~/stores/category';
+import { useField, useForm } from 'vee-validate';
+import * as yup from 'yup';
+
+const schema = yup.object({
+    title: yup.string().required("Title is required"),
+    content: yup.string().required("Content is required"),
+    category: yup.string().required("Category is required"),
+    image: yup.string().required("Image is required"),
+});
+
+const { handleSubmit, resetForm } = useForm({
+    validationSchema: schema,
+});
+
+const { value: title, errorMessage: titleError } = useField('title');
+const { value: content, errorMessage: contentError } = useField('content');
+const { value: category, errorMessage: categoryError } = useField('category');
+const { value: image, errorMessage: imageError } = useField('image');
 
 const router = useRouter();
 const route = useRoute();
@@ -67,10 +87,6 @@ const storyStore = useStory();
 const storyId = route.params.id;
 const urlBase = 'https://storytime-api.strapi.timedoor-js.web.id';
 
-const title = ref('');
-const content = ref('');
-const category = ref('');
-const image = ref<File | null>(null);
 const imageUrl = ref('');
 
 const listCategory = computed(() => {
@@ -81,6 +97,13 @@ onMounted(async () => {
     await categoryStore.fetchCategories();
     await fetchStoryDetails();
 });
+
+watch(content, () => {
+    if (content.value === '<p><br></p>') {
+        content.value = '';
+    }
+});
+
 
 async function fetchStoryDetails() {
     try {
@@ -101,7 +124,7 @@ function batalAdd() {
     router.push('/user/story');
 }
 
-async function saveStory() {
+const saveStory = handleSubmit(async () => {
     try {
         const updatedData = {
             data: {
@@ -125,7 +148,8 @@ async function saveStory() {
     } catch (err) {
         console.error(err);
     }
-}
+});
+
 
 function onImageChange(file: File) {
     image.value = file; 
