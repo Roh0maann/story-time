@@ -5,7 +5,6 @@
             <slot></slot>
         </label>
             <input :class="['form-control', 'rounded-0']"
-            v-bind="field"
             :type="type"
             :id="identity"
             :placeholder="placeholder"

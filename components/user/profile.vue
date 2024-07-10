@@ -116,10 +116,9 @@ const { handleSubmit, resetForm, setValues } = useForm({
 
 const { value: name, errorMessage: nameError } = useField('name');
 
-setValues({name: profileStore.name, })
-
 onMounted(async () => {
     await profileStore.profileUser();
+    setValues({name: profileStore.name, })
 });
 
 function startEditing() {
@@ -139,7 +138,6 @@ const saveProfile = handleSubmit( async () => {
         });
 
         profileStore.name = name.value;
-        profileStore.biodata = biodata.value;
 
         isEditing.value = false;
     } catch (error) {

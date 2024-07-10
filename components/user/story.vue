@@ -29,7 +29,7 @@
               <NuxtLink :to="'/story/' + story.id" class="text-decoration-none text-black">{{ story.title }}</NuxtLink>
             </td>
             <td>{{ formatDateStory(story.updatedAt) }}</td>
-            <td class="d-flex">
+            <td class="d-flex h-100">
               <NuxtLink :to="'/user/story/' + story.id + '/edit'" class="btn btn-outline-dark rounded-0 py-1 px-3 me-3 btn-edit w-auto">
                 <i class="fa-solid fa-pen"></i> <span class="d-sm-inline">Edit</span>
               </NuxtLink>
