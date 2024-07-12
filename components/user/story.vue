@@ -7,14 +7,18 @@
       </NuxtLink>
     </div>
 
-    <div class="mt-5 mb-3" v-if="storyStore.storyList.length === 0">
+    <div class="mt-5 mb-3" v-if="!loading && storyStore.storyList.length === 0">
       <div class="text-center">
         <img class="me-4 empty-data-image" style="width: 20%;" src="~/assets/images/empty-data.svg" alt="No data found" />
         <p class="p-0 mt-3 fw-semibold empty-data-text" style="font-size: 24px;">No data found</p>
       </div>
     </div>
 
-    <div class="mt-4 mb-3" v-else>
+    <div v-if="loading" class="text-center my-3">
+      <h1 class="py-5 my-5">Loading...</h1>
+    </div>
+
+    <div class="mt-4 mb-3" v-else-if="storyStore.storyList.length > 0">
       <table class="table table-responsive table-hover table-striped">
         <thead>
           <tr class="table-group-divider fs-6">
@@ -89,9 +93,9 @@ import { formatDateStory } from '~/helpers/dateFormat';
 const authStore = useAuth();
 const storyStore = useStory();
 
-
 const storyIdDelete = ref('');
 const currentPage = ref(1);
+const loading = ref(false);
 const totalPages = computed(() => storyStore.pageCount);
 
 const pagination = computed(() => {
@@ -101,6 +105,7 @@ const pagination = computed(() => {
 onMounted(async () => {
   try {
     await fetchStories(currentPage.value);
+    await storyStore.getUserStory();
   } catch (error) {
     console.error(error);
   }
@@ -108,9 +113,12 @@ onMounted(async () => {
 
 const fetchStories = async (page) => {
   try {
-    await storyStore.getUserStory(page);
+    loading.value = true;
+    await storyStore.getUserStory(page); // Fetch stories for the current user
+    loading.value = false;
   } catch (error) {
     console.error(error);
+    loading.value = false;
   }
 };
 
@@ -131,7 +139,6 @@ const deleteStory = async () => {
       await storyStore.deleteStory(storyIdDelete.value);
       storyIdDelete.value = null;
 
-      
       if (storyStore.storyList.length === 0 && currentPage.value > 1) {
         await changePage(currentPage.value - 1);
       } else {
